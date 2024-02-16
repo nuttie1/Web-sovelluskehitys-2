@@ -25,10 +25,10 @@ function App() {
               <Link to="/">Game</Link>
             </li>
             <li>
-              <Link to="/profile">Profile</Link>
+              <Link to="/Profile">Profile</Link>
             </li>
             <li>
-              <Link to="/leaderboard">Leaderboard</Link>
+              <Link to="/Leaderboard">Leaderboard</Link>
             </li>
           </ul>
         </nav>

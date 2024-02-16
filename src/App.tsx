@@ -4,6 +4,9 @@ import Profile from './components/Profile';
 import Leaderboard from './components/Leaderboard';
 import Game from './components/Game';
 
+import { CSSProperties } from 'react';
+
+
 function App() {
   // Sample data for the Profile and Leaderboard components
   const userProfile = { name: 'John Doe', email: 'john.doe@example.com' };
@@ -13,22 +16,53 @@ function App() {
     { name: 'Charlie', score: 150 },
   ];
 
+  const navStyle = {
+    display: 'flex',
+    justifyContent: 'space-around',
+    listStyle: 'none',
+    padding: '10px',
+    backgroundColor: '#f3f3f3',
+    borderRadius: '5px',
+  };
+  const appStyle: CSSProperties  = {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100vh', // This will make sure your app takes the full height of the viewport
+    textAlign: 'center', // This will center the text
+  };
+  
+  const linkStyle = {
+    textDecoration: 'none',
+    color: 'black',
+  };
+  const buttonStyle = {
+    padding: '10px 20px', // Increase padding to make buttons bigger
+    fontSize: '18px', // Increase font size to make text bigger
+  };
+  
+
   return (
     <Router>
-      <div>
-        <h1>GAME</h1>
-        <p>Welcome to the GAME.</p>
-
+      <div style={appStyle}>
         <nav>
-          <ul>
+          <ul style={navStyle}>
             <li>
-              <Link to="/">Game</Link>
+              <Link to="/" style={linkStyle}>
+                <button style={buttonStyle}>Game</button>
+              </Link>
+            </li>
+            
+            <li>
+              <Link to="/Leaderboard" style={linkStyle}>
+                <button style={buttonStyle}>Leaderboard</button>
+              </Link>
             </li>
             <li>
-              <Link to="/Profile">Profile</Link>
-            </li>
-            <li>
-              <Link to="/Leaderboard">Leaderboard</Link>
+              <Link to="/Profile" style={linkStyle}>
+                <button style={buttonStyle}>Profile</button>
+              </Link>
             </li>
           </ul>
         </nav>
@@ -42,5 +76,4 @@ function App() {
     </Router>
   );
 }
-
 export default App;

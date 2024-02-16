@@ -22,6 +22,8 @@ const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 
   return (
     <div>
+      <h1>GAME</h1>
+        <p>Welcome to the GAME.</p>
         <p>The players are: s1mple, ZywOo, device, NiKo, electronic</p>
 
       <form onSubmit={handleSubmit}>

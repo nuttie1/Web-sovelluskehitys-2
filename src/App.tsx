@@ -62,10 +62,14 @@ function App() {
               </Link>
             </li>
             <li>
-              <Link to="/Login">Login</Link>
+              <Link to="/Login" style={linkStyle}>
+                <button style={buttonStyle}>Login</button>
+              </Link>
             </li>
             <li>
-              <Link to="/Register">Register</Link>
+              <Link to="/Register" style={linkStyle}>
+                <button style={buttonStyle}>Register</button>
+              </Link>
             </li>
             <li>
               <Link to="/Profile" style={linkStyle}>

@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
 import Profile from './components/Profile';
 import Leaderboard from './components/Leaderboard';
 import Game from './components/Game';
+import Login from './components/Login';
+import Register from './components/Register';
 
 import { CSSProperties } from 'react';
 
@@ -60,6 +62,12 @@ function App() {
               </Link>
             </li>
             <li>
+              <Link to="/Login">Login</Link>
+            </li>
+            <li>
+              <Link to="/Register">Register</Link>
+            </li>
+            <li>
               <Link to="/Profile" style={linkStyle}>
                 <button style={buttonStyle}>Profile</button>
               </Link>
@@ -71,6 +79,8 @@ function App() {
           <Route path="/" element={<Game />} />
           <Route path="/Profile" element={<Profile name={userProfile.name} email={userProfile.email} />} />
           <Route path="/Leaderboard" element={<Leaderboard scores={userScores} />} />
+          <Route path="/Login" element={<Login />} />
+          <Route path="/Register" element={<Register />} />
         </Routes>
       </div>
     </Router>

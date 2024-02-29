@@ -60,7 +60,7 @@ function App() {
     fontSize: '18px', // Increase font size to make text bigger
   };
   
-
+// ad title to the page
   return (
     <Router>
       <div style={appStyle}>

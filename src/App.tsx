@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
 import Profile from './components/Profile';
 import Leaderboard from './components/Leaderboard';
@@ -18,19 +18,34 @@ function App() {
     { name: 'Charlie', score: 150 },
   ];
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogin = () => {
+    // Kirjautumisen käsittelijä
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    // Uloskirjautumisen käsittelijä
+    setIsLoggedIn(false);
+  };
+
   const navStyle = {
     display: 'flex',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     listStyle: 'none',
-    padding: '10px',
     backgroundColor: '#f3f3f3',
     borderRadius: '5px',
+    paddingLeft: '25%',
+    paddingRight: '25%',
+    paddingBottom: '10px',
+    paddingTop: '10px',
   };
+
   const appStyle: CSSProperties  = {
-    display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
     height: '100vh', // This will make sure your app takes the full height of the viewport
     textAlign: 'center', // This will center the text
   };
@@ -39,6 +54,7 @@ function App() {
     textDecoration: 'none',
     color: 'black',
   };
+
   const buttonStyle = {
     padding: '10px 20px', // Increase padding to make buttons bigger
     fontSize: '18px', // Increase font size to make text bigger
@@ -49,32 +65,27 @@ function App() {
     <Router>
       <div style={appStyle}>
         <nav>
-          <ul style={navStyle}>
+            <ul style={navStyle}>
             <li>
               <Link to="/" style={linkStyle}>
                 <button style={buttonStyle}>Game</button>
               </Link>
-            </li>
-            
+            </li> 
             <li>
               <Link to="/Leaderboard" style={linkStyle}>
                 <button style={buttonStyle}>Leaderboard</button>
               </Link>
             </li>
             <li>
-              <Link to="/Login" style={linkStyle}>
-                <button style={buttonStyle}>Login</button>
-              </Link>
-            </li>
-            <li>
-              <Link to="/Register" style={linkStyle}>
-                <button style={buttonStyle}>Register</button>
-              </Link>
-            </li>
-            <li>
-              <Link to="/Profile" style={linkStyle}>
-                <button style={buttonStyle}>Profile</button>
-              </Link>
+              {isLoggedIn ? (
+                <Link to="/Profile" style={linkStyle}>
+                  <button style={buttonStyle}>Profile</button>
+                </Link>
+                ) : (
+                <Link to="/Login" style={linkStyle}>
+                  <button style={buttonStyle}>Login</button>
+                </Link>
+              )}
             </li>
           </ul>
         </nav>

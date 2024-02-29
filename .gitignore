@@ -1,3 +1,6 @@
+# Own modifications
+build/
+
 # Logs
 logs
 *.log

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import '../styles/Game.css';
+
 const players = ['s1mple', 'ZywOo', 'device', 'NiKo', 'electronic']; // Add more player names as needed
 
 function Game() {
@@ -20,17 +22,27 @@ const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     }
 };
 
-  return (
-    <div>
-      <h1>GAME</h1>
-        <p>Welcome to the GAME.</p>
-        <p>The players are: s1mple, ZywOo, device, NiKo, electronic</p>
+return (
+    <div className="game-container">
+      <h1 className="game-title">GAME</h1>
+      <p className="game-description">Welcome to the GAME.</p>
 
       <form onSubmit={handleSubmit}>
-        <input type="text" value={guess} onChange={handleChange} />
-        <input type="submit" value="Guess" />
+        <input
+          type="text"
+          value={guess}
+          onChange={handleChange}
+          className="guess-input"
+          placeholder="Enter your guess"
+        />
+        <input
+          type="submit"
+          value="Guess"
+          className="guess-button"
+        />
       </form>
-      <p>{message}</p>
+
+      <p className="game-message">{message}</p>
     </div>
   );
 }

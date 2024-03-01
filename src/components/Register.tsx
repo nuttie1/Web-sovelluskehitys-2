@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import '../styles/Register.css';
+
 const RegisterPage: React.FC = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -18,31 +20,33 @@ const RegisterPage: React.FC = () => {
     };
 
     return (
-        <div>
-            <h1>Register Page</h1>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="username">Username:</label>
-                    <input
-                        type="text"
-                        id="username"
-                        value={username}
-                        onChange={handleUsernameChange}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="password">Password:</label>
-                    <input
-                        type="password"
-                        id="password"
-                        value={password}
-                        onChange={handlePasswordChange}
-                    />
-                </div>
-                <button type="submit">Register</button>
-            </form>
+        <div className="register-form-container">
+          <h1 className="register-title">Create account</h1>
+          <form onSubmit={handleSubmit} className="register-form">
+            <div className="register-form-group">
+              <label htmlFor="username" className="register-label">Username:</label>
+              <input
+                type="text"
+                id="username"
+                value={username}
+                onChange={handleUsernameChange}
+                className="register-input"
+              />
+            </div>
+            <div className="register-form-group">
+              <label htmlFor="password" className="register-label">Password:</label>
+              <input
+                type="password"
+                id="password"
+                value={password}
+                onChange={handlePasswordChange}
+                className="register-input"
+              />
+            </div>
+            <button type="submit" className="register-button">Register</button>
+          </form>
         </div>
-    );
+      );
 };
 
 export default RegisterPage; 

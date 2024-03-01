@@ -1,0 +1,39 @@
+.leaderboard-container {
+    text-align: center;
+    margin-top: 50px;
+}
+  
+.leaderboard-title {
+    font-size: 36px;
+    color: #333;
+}
+  
+.leaderboard-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    margin: 0 auto; /* Keskittää listan */
+    max-width: 400px; /* Rajoittaa listan leveyden */
+}
+  
+.leaderboard-item {
+    font-size: 18px;
+    color: #666;
+    padding: 10px 0;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+  
+.leaderboard-item:last-child {
+    border-bottom: none;
+}
+  
+.leaderboard-name {
+    font-weight: bold;
+}
+  
+.leaderboard-score {
+    color: #007bff;
+}

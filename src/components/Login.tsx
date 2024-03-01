@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import '../styles/Login.css';
+
 const Login: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -11,19 +13,29 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <label>
+    <div className="login-form-container">
+      <form onSubmit={handleSubmit} className="login-form">
+        <label className="login-label">
           Username:
-          <input type="text" value={username} onChange={e => setUsername(e.target.value)} />
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="login-input"
+          />
         </label>
-        <label>
+        <label className="login-label">
           Password:
-          <input type="password" value={password} onChange={e => setPassword(e.target.value)} />
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="login-input"
+          />
         </label>
-        <input type="submit" value="Submit" />
+        <input type="submit" value="Submit" className="login-button" />
       </form>
-      <a href="/register">No account yet? Sign up</a>
+      <a href="/register" className="signup-link">No account yet? Sign up</a>
     </div>
   );
 };

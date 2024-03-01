@@ -6,7 +6,7 @@ import Game from './components/Game';
 import Login from './components/Login';
 import Register from './components/Register';
 
-import { CSSProperties } from 'react';
+import './styles/Navbar.css';
 
 
 function App() {
@@ -30,60 +30,31 @@ function App() {
     setIsLoggedIn(false);
   };
 
-  const navStyle = {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    listStyle: 'none',
-    backgroundColor: '#f3f3f3',
-    borderRadius: '5px',
-    paddingLeft: '25%',
-    paddingRight: '25%',
-    paddingBottom: '10px',
-    paddingTop: '10px',
-  };
-
-  const appStyle: CSSProperties  = {
-    flexDirection: 'column',
-    alignItems: 'center',
-    height: '100vh', // This will make sure your app takes the full height of the viewport
-    textAlign: 'center', // This will center the text
-  };
-  
-  const linkStyle = {
-    textDecoration: 'none',
-    color: 'black',
-  };
-
-  const buttonStyle = {
-    padding: '10px 20px', // Increase padding to make buttons bigger
-    fontSize: '18px', // Increase font size to make text bigger
-  };
   
 // ad title to the page
   return (
     <Router>
-      <div style={appStyle}>
+      <div>
         <nav>
-            <ul style={navStyle}>
+          <ul className="nav">
             <li>
-              <Link to="/" style={linkStyle}>
-                <button style={buttonStyle}>Game</button>
+              <Link to="/" className="navLink">
+                <button className="navButton">Game</button>
               </Link>
             </li> 
             <li>
-              <Link to="/Leaderboard" style={linkStyle}>
-                <button style={buttonStyle}>Leaderboard</button>
+              <Link to="/Leaderboard" className="navLink">
+                <button className="navButton">Leaderboard</button>
               </Link>
             </li>
             <li>
               {isLoggedIn ? (
-                <Link to="/Profile" style={linkStyle}>
-                  <button style={buttonStyle}>Profile</button>
+                <Link to="/Profile" className="navLink">
+                  <button className="navButton">Profile</button>
                 </Link>
                 ) : (
-                <Link to="/Login" style={linkStyle}>
-                  <button style={buttonStyle}>Login</button>
+                <Link to="/Login" className="navLink">
+                  <button className="navButton">Login</button>
                 </Link>
               )}
             </li>

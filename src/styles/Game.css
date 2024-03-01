@@ -1,0 +1,44 @@
+.game-container {
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+.game-title {
+    font-size: 36px;
+    color: #333;
+}
+
+.game-description {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.guess-input {
+    padding: 10px;
+    margin-bottom: 10px;
+    width: 200px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.guess-button {
+    padding: 10px 20px;
+    background-color: #970000;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.guess-button:hover {
+    background-color: #cc0000;
+}
+
+.game-message {
+    font-size: 18px;
+    color: #333;
+}

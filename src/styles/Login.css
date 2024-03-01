@@ -1,0 +1,49 @@
+.login-form-container {
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+.login-form {
+    margin: 0 auto; /* Keskittää lomakkeen */
+    max-width: 400px; /* Rajoittaa lomakkeen leveyden */
+}
+  
+.login-label {
+    display: block;
+    margin-bottom: 10px;
+}
+  
+.login-input {
+    padding: 8px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box; /* Huomioi reunukset leveydessä */
+}
+  
+.login-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Lisätty hover-efekti */
+}
+  
+.login-button:hover {
+    background-color: #0056b3;
+}
+  
+.signup-link {
+    display: block;
+    margin-top: 20px;
+    color: #007bff;
+    text-decoration: none;
+}
+  
+.signup-link:hover {
+    text-decoration: underline;
+}

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import '../styles/Profile.css';
+
 interface UserProfile {
   name: string;
   email: string;
@@ -7,9 +9,10 @@ interface UserProfile {
 
 const Profile: React.FC<UserProfile> = ({ name, email }) => {
   return (
-    <div>
-      <h1>{name}</h1>
-      <p>{email}</p>
+    <div className="profile-container">
+      <h1 className="profile-title">{name}</h1>
+      <p className="profile-email">{email}</p>
+      <p className="profile-points">Your points: 0</p>
     </div>
   );
 };

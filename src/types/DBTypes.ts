@@ -18,5 +18,4 @@ type csPlayer = Partial<Document> & {
     total_winnings: number;
 };
 
-
 export type { User, csPlayer };

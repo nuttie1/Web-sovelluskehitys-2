@@ -59,4 +59,4 @@ jobs:
           app-name: 'noo-web-app'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_109AC71C8C8E43B5AA95099E6A689C55 }}
-          package: ./build
+          package: .

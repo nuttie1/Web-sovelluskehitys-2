@@ -8,6 +8,8 @@ type User = Partial<Document> & {
     password: string;
 };
 
+type UserOutput = Omit<User, 'password' | 'role'>;
+
 type csPlayer = Partial<Document> & {
     id: Types.ObjectId | string;
     name: string;
@@ -18,4 +20,4 @@ type csPlayer = Partial<Document> & {
     total_winnings: number;
 };
 
-export type { User, csPlayer };
+export type { User, csPlayer, UserOutput };

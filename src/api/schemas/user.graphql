@@ -10,6 +10,7 @@ type LoginResponse {
 }
 
 type UserResponse {
+    message: String!
     user: User!
 }
 

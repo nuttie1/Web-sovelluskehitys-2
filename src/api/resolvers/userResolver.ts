@@ -21,6 +21,7 @@ export default {
     },
     Mutation: {
         register: async (_parent: undefined, args: {user: RegisterInput}) => {
+            console.log(args.user);
             return await fetchData<UserResponse> (
                 `${process.env.AUTH_URL}/users`,
                 {

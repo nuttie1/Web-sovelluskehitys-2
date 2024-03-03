@@ -38,8 +38,8 @@ type Query {
 }
 
 type Mutation {
-    register( User : RegisterInput! ): UserResponse
+    register( user : RegisterInput! ): UserResponse
     login( loginInput : LoginInput! ): LoginResponse
-    updateUser( User: UpdateUserInput! ): User
+    updateUser( user: UpdateUserInput! ): User
     deleteUser: UserResponse
 }

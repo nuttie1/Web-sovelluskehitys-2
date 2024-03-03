@@ -73,7 +73,7 @@ function App() {
           <Route path="/Profile" element={<Profile name={userProfile.name} email={userProfile.email} />} />
           <Route path="/Leaderboard" element={<Leaderboard scores={userScores} />} />
           <Route path="/Login" element={<Login onLogin={handleLogin} />} />
-          <Route path="/Register" element={<Register />} />
+          <Route path="/Register" element={<Register onLogin={handleLogin}/>} />
         </Routes>
       </ApolloProvider>
       </div>

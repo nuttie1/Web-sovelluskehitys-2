@@ -21,7 +21,6 @@ const Login: React.FC<{onLogin: () => void;}> = ({onLogin}) => {
 
   const [login, { data, loading, error }] = useMutation(LOGIN_MUTATION);
 
-
   const handleSubmit = async (event: React.FormEvent) => {
     console.log('Logging in...');
     event.preventDefault();
@@ -36,9 +35,6 @@ const Login: React.FC<{onLogin: () => void;}> = ({onLogin}) => {
     } catch (error) {
       console.error('Error logging in:', error);
     }
-
-
-
     console.log(`Logging in with username: ${username} and password: ${password}`);
   };
 

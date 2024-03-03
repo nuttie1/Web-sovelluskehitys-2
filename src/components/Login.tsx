@@ -1,14 +1,35 @@
+import {useMutation, gql} from '@apollo/client';
 import React, { useState } from 'react';
 
 import '../styles/Login.css';
+
+const LOGIN_MUTATION = gql`
+  mutation Login($username: String!, $password: String!) {
+    login(credentials: {username: $username, password: $password}) {
+      token
+      user {
+        id
+        username
+      }
+    }
+  }
+`;
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const [login, { data, loading, error }] = useMutation(LOGIN_MUTATION);
+
+
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    // Handle login logic here
+    try {
+      const { data } = await login({variables: { username, password } });
+    } catch (error) {
+      console.error('Error logging in:', error);
+    }
+
     console.log(`Logging in with username: ${username} and password: ${password}`);
   };
 

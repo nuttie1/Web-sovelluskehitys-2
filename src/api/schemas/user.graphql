@@ -21,7 +21,7 @@ input RegisterInput {
 }
 
 input LoginInput {
-    user_name: String!
+    username: String!
     password: String!
 }
 
@@ -33,13 +33,13 @@ input UpdateUserInput {
 
 type Query {
     users: [User]
-    user(id: ID!): User
+    userById(id: ID!): User
     checkToken: UserResponse
 }
 
 type Mutation {
     register( User : RegisterInput! ): UserResponse
-    login( User : LoginInput! ): LoginResponse
+    login( loginInput : LoginInput! ): LoginResponse
     updateUser( User: UpdateUserInput! ): User
     deleteUser: UserResponse
 }

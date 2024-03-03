@@ -5,9 +5,15 @@ import Leaderboard from './components/Leaderboard';
 import Game from './components/Game';
 import Login from './components/Login';
 import Register from './components/Register';
+import { ApolloProvider } from '@apollo/client';
+import { ApolloClient, InMemoryCache } from '@apollo/client';
 
 import './styles/Navbar.css';
 
+const client = new ApolloClient({
+  uri: 'http://localhost:4000/graphql',
+  cache: new InMemoryCache()
+});
 
 function App() {
   // Sample data for the Profile and Leaderboard components
@@ -61,13 +67,15 @@ function App() {
           </ul>
         </nav>
 
-        <Routes>
+      <ApolloProvider client={client}>
+        <Routes >
           <Route path="/" element={<Game />} />
           <Route path="/Profile" element={<Profile name={userProfile.name} email={userProfile.email} />} />
           <Route path="/Leaderboard" element={<Leaderboard scores={userScores} />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/Register" element={<Register />} />
         </Routes>
+      </ApolloProvider>
       </div>
     </Router>
   );

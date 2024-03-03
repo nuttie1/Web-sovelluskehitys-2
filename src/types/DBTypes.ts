@@ -10,6 +10,15 @@ type User = Partial<Document> & {
 
 type UserOutput = Omit<User, 'password' | 'role'>;
 
+type LoginUser = Omit<User, 'password'>;
+
+type RegisterInput = Omit<User, "id" | "role">;
+
+type TokenContent = {
+    token: string;
+    user: LoginUser;
+};
+
 type csPlayer = Partial<Document> & {
     id: Types.ObjectId | string;
     name: string;
@@ -20,4 +29,4 @@ type csPlayer = Partial<Document> & {
     total_winnings: number;
 };
 
-export type { User, csPlayer, UserOutput };
+export type { User, csPlayer, UserOutput, RegisterInput, TokenContent, LoginUser};

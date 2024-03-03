@@ -5,17 +5,17 @@ import '../styles/Login.css';
 
 const LOGIN_MUTATION = gql`
   mutation Login($username: String!, $password: String!) {
-    login(credentials: {username: $username, password: $password}) {
+    login(loginInput: {username: $username, password: $password}) {
       token
       user {
         id
-        username
+        user_name
       }
     }
   }
 `;
 
-const Login: React.FC = () => {
+const Login: React.FC<{onLogin: () => void;}> = ({onLogin}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -23,12 +23,21 @@ const Login: React.FC = () => {
 
 
   const handleSubmit = async (event: React.FormEvent) => {
+    console.log('Logging in...');
     event.preventDefault();
     try {
       const { data } = await login({variables: { username, password } });
+
+      if (data) {
+        console.log('Logged in:', data);
+        onLogin();
+      }
+
     } catch (error) {
       console.error('Error logging in:', error);
     }
+
+
 
     console.log(`Logging in with username: ${username} and password: ${password}`);
   };

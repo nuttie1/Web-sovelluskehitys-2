@@ -42,3 +42,37 @@
     font-size: 18px;
     color: #333;
 }
+
+table {
+    width: 70%; /* Muutetaan taulukon leveyttä hieman pienemmäksi */
+    margin: 0 auto; /* Keskitetään taulukko sivulle */
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+  
+table th,
+table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+  
+table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+  
+table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+  
+table tbody tr:hover {
+    background-color: #f0f0f0;
+}
+
+.correct-guess {
+    background-color: lightgreen;
+}
+
+.incorrect-guess {
+    background-color: #ffcccc;
+}

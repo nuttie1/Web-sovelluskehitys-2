@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { csPlayer } from '../types/DBTypes';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faArrowUp, faArrowDown} from '@fortawesome/free-solid-svg-icons';
 import '../styles/Game.css';
 
 function Game() {
@@ -94,9 +96,13 @@ return (
             <td className={player.name === hardcodedPlayer.name ? 'correct-guess' : 'incorrect-guess'}>{player.name}</td>
             <td className={player.country === hardcodedPlayer.country ? 'correct-guess' : 'incorrect-guess'}>{player.country}</td>
             <td className={player.team === hardcodedPlayer.team ? 'correct-guess' : 'incorrect-guess'}>{player.team}</td>
-            <td className={player.age === hardcodedPlayer.age ? 'correct-guess' : 'incorrect-guess'}>{player.age}</td>
+            <td className={player.age === hardcodedPlayer.age ? 'correct-guess' : 'incorrect-guess'}>
+              {player.age} {player.age === hardcodedPlayer.age ? '' : player.age > hardcodedPlayer.age ? <FontAwesomeIcon icon={faArrowDown} /> : <FontAwesomeIcon icon={faArrowUp} />}
+            </td>
             <td className={player.role === hardcodedPlayer.role ? 'correct-guess' : 'incorrect-guess'}>{player.role}</td>
-            <td className={player.total_winnings === hardcodedPlayer.total_winnings ? 'correct-guess' : 'incorrect-guess'}>{player.total_winnings}</td>
+            <td className={player.total_winnings === hardcodedPlayer.total_winnings ? 'correct-guess' : 'incorrect-guess'}>
+              {player.total_winnings} {player.total_winnings === hardcodedPlayer.total_winnings ? '' : player.total_winnings > hardcodedPlayer.total_winnings ? <FontAwesomeIcon icon={faArrowDown} /> : <FontAwesomeIcon icon={faArrowUp} />}
+            </td>
           </tr>
         ))}
       </tbody>

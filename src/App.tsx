@@ -11,7 +11,7 @@ import { ApolloClient, InMemoryCache } from '@apollo/client';
 import './styles/Navbar.css';
 
 const client = new ApolloClient({
-  uri: 'https://noo-web-app.azurewebsites.net/graphql',
+  uri: process.env.REACT_APP_GRAPHQL_ENDPOINT,
   cache: new InMemoryCache()
 });
 

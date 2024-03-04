@@ -1,13 +1,11 @@
 import { render, screen } from '@testing-library/react';
 import App from '../App';
 
-
-test('renders learn react link', () => {
-  const mockScores = [
-    { name: 'Alice', score: 100 },
-    { name: 'Bob', score: 200 },
-    { name: 'Charlie', score: 150 },
-  ];
-
-  render(<App/>);
+// Test that the App.tsx renders correct navigation links
+test('renders navigation links', () => {
+  render(<App />);
+  const gameButton = screen.getByText('Game');
+  const leaderboardButton = screen.getByText('Leaderboard');
+  expect(gameButton).toBeInTheDocument();
+  expect(leaderboardButton).toBeInTheDocument();
 });

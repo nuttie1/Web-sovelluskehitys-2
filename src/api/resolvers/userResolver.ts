@@ -32,7 +32,7 @@ export default {
                 }
             );
         },
-        login: async (_parent: undefined, args: {loginInput: {username: string, password: string}}) => {
+        login: async (_parent: undefined, args: {loginInput: {user_name: string, password: string}}) => {
             console.log(args.loginInput);
             return await fetchData<LoginResponse> (
                 `${process.env.AUTH_URL}/auth/login`,

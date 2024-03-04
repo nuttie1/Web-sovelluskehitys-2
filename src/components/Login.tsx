@@ -5,7 +5,7 @@ import '../styles/Login.css';
 
 const LOGIN_MUTATION = gql`
   mutation Login($username: String!, $password: String!) {
-    login(loginInput: {username: $username, password: $password}) {
+    login(loginInput: {user_name: $username, password: $password}) {
       token
       user {
         id

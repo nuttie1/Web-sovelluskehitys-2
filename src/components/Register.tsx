@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import '../styles/Register.css';
 
 const REGISTER_MUAATION = gql`  
-  mutation Register($email: String!, $username: String!, $password: String!) {
-    register(user: {email: $email, user_name: $username, password: $password}) {
+  mutation Register($username: String!, $password: String!) {
+    register(user: {user_name: $username, password: $password}) {
       user {
         id
         user_name
@@ -39,15 +39,6 @@ const RegisterPage: React.FC<{onLogin: () => void;}> = ({onLogin}) => {
     <div className="register-form-container">
       <h1 className="register-title">Create account</h1>
         <form onSubmit={handleSubmit} className="register-form">
-          <label className="register-label">
-            email:
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="register-input"  
-            />
-          </label>
           <label className="register-label">
             Username:
             <input

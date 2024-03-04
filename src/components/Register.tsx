@@ -15,7 +15,6 @@ const REGISTER_MUAATION = gql`
 `;
 
 const RegisterPage: React.FC<{onLogin: () => void;}> = ({onLogin}) => {
-  const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -24,7 +23,7 @@ const RegisterPage: React.FC<{onLogin: () => void;}> = ({onLogin}) => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const { data } = await register({variables: { email, username, password } });
+      const { data } = await register({variables: { username, password } });
 
       if (data) {
         console.log('Registered:', data);

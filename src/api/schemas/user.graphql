@@ -1,6 +1,7 @@
 type User {
     id: ID!
     user_name: String!
+    points: Int!
 }
 
 type LoginResponse {

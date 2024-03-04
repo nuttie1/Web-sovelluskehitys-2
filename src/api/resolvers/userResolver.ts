@@ -2,6 +2,7 @@ import fetchData from "../../functions/fetchData"
 import { RegisterInput, UserOutput, LoginUser } from "../../types/DBTypes"
 import { UserResponse, LoginResponse } from "../../types/MessageTypes";
 import { MyContext } from "../../types/MyContext";
+import { isLoggedIn } from "../../functions/authorize";
 
 export default {
     Query: {
@@ -43,6 +44,7 @@ export default {
             );
         },
         updateUser: async (_parent: undefined, args: {user: LoginUser}, context: MyContext) => {
+            isLoggedIn(context);
             return await fetchData<UserResponse> (
                 `${process.env.AUTH_URL}/users/${context.userdata?.user.id}`,
                 {
@@ -56,6 +58,7 @@ export default {
             );
         },
         deleteUser: async (_parent: undefined, _args: undefined, context: MyContext) => {
+            isLoggedIn(context);
             return await fetchData<UserResponse> (
                 `${process.env.AUTH_URL}/users/${context.userdata?.user.id}`,
                 {

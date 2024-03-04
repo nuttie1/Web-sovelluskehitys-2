@@ -7,6 +7,8 @@ import '../styles/Game.css';
 function Game() {
   const [guess, setGuess] = useState('');
   const [guesses, setGuesses] = useState<csPlayer[]>([]);
+  const [remainingGuesses, setRemainingGuesses] = useState(8);
+  const [showAnswer, setShowAnswer] = useState(false);
 
   // Hardcoded player for testing
   const hardcodedPlayer: csPlayer = {
@@ -19,96 +21,121 @@ function Game() {
     total_winnings: 1726000,
   };
 
-const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setGuess(event.target.value);
-};
-
-const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-  event.preventDefault();
-
-  // Hardcoded guess for testing
-  const guessedPlayer: csPlayer = {
-    id: "2",
-    name: guess,
-    country: "Finland",
-    team: "JANO",
-    age: 20,
-    role: "rifler",
-    total_winnings: 15,
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setGuess(event.target.value);
   };
 
-  // Tarkista, osuiko arvaus oikeaan pelaajaan
-  const isCorrectGuess =
-    guessedPlayer.name === hardcodedPlayer.name &&
-    guessedPlayer.country === hardcodedPlayer.country &&
-    guessedPlayer.team === hardcodedPlayer.team &&
-    guessedPlayer.age === hardcodedPlayer.age &&
-    guessedPlayer.role === hardcodedPlayer.role &&
-    guessedPlayer.total_winnings === hardcodedPlayer.total_winnings;
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-    if (isCorrectGuess) {
-      console.log('Correct guess');
-    } else {
-      console.log('Incorrect guess');
-    }
+    // Hardcoded guess for testing
+    const guessedPlayer: csPlayer = {
+      id: "2",
+      name: guess,
+      country: "Finland",
+      team: "JANO",
+      age: 20,
+      role: "rifler",
+      total_winnings: 15,
+    };
 
-  // Päivitä arvauslista
-  setGuesses([...guesses, guessedPlayer]);
+    // Tarkista, osuiko arvaus oikeaan pelaajaan
+    const isCorrectGuess =
+      guessedPlayer.name === hardcodedPlayer.name &&
+      guessedPlayer.country === hardcodedPlayer.country &&
+      guessedPlayer.team === hardcodedPlayer.team &&
+      guessedPlayer.age === hardcodedPlayer.age &&
+      guessedPlayer.role === hardcodedPlayer.role &&
+      guessedPlayer.total_winnings === hardcodedPlayer.total_winnings;
 
-  // Tyhjennä syötekenttä
-  setGuess('');
-};
+      if (isCorrectGuess || remainingGuesses <= 1) {
+        setShowAnswer(true);
+        console.log('Correct guess');
+      } else {
+        setRemainingGuesses(prev => prev - 1);
+        console.log('Incorrect guess');
+      }
 
-return (
-  <div className="game-container">
-    <h1 className="game-title">GAME</h1>
-    <p className="game-description">Welcome to the GAME.</p>
+    // Päivitä arvauslista
+    setGuesses([...guesses, guessedPlayer]);
 
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        value={guess}
-        onChange={handleChange}
-        className="guess-input"
-        placeholder="Enter your guess"
-      />
-      <input
-        type="submit"
-        value="Guess"
-        className="guess-button"
-      />
-    </form>
+    // Tyhjennä syötekenttä
+    setGuess('');
+  };
 
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Country</th>
-          <th>Team</th>
-          <th>Age</th>
-          <th>Role</th>
-          <th>Earnings</th>
-        </tr>
-      </thead>
-      <tbody>
-        {guesses.map((player, index) => (
-          <tr key={index}>
-            <td className={player.name === hardcodedPlayer.name ? 'correct-guess' : 'incorrect-guess'}>{player.name}</td>
-            <td className={player.country === hardcodedPlayer.country ? 'correct-guess' : 'incorrect-guess'}>{player.country}</td>
-            <td className={player.team === hardcodedPlayer.team ? 'correct-guess' : 'incorrect-guess'}>{player.team}</td>
-            <td className={player.age === hardcodedPlayer.age ? 'correct-guess' : 'incorrect-guess'}>
-              {player.age} {player.age === hardcodedPlayer.age ? '' : player.age > hardcodedPlayer.age ? <FontAwesomeIcon icon={faArrowDown} /> : <FontAwesomeIcon icon={faArrowUp} />}
-            </td>
-            <td className={player.role === hardcodedPlayer.role ? 'correct-guess' : 'incorrect-guess'}>{player.role}</td>
-            <td className={player.total_winnings === hardcodedPlayer.total_winnings ? 'correct-guess' : 'incorrect-guess'}>
-              {player.total_winnings} {player.total_winnings === hardcodedPlayer.total_winnings ? '' : player.total_winnings > hardcodedPlayer.total_winnings ? <FontAwesomeIcon icon={faArrowDown} /> : <FontAwesomeIcon icon={faArrowUp} />}
-            </td>
+  return (
+    <div className="game-container">
+      <h1 className="game-title">GAME</h1>
+      <p className="game-description">Welcome to the GAME.</p>
+
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={guess}
+          onChange={handleChange}
+          className="guess-input"
+          placeholder="Enter your guess"
+          disabled={showAnswer} // Estä syötteen ottaminen, kun oikea vastaus on näytetty
+        />
+        <input
+          type="submit"
+          value="Guess"
+          className="guess-button"
+          disabled={showAnswer} // Estä arvauksen tekeminen, kun oikea vastaus on näytetty
+        />
+      </form>
+
+        {remainingGuesses > 0 && !showAnswer && (
+          <p>Remaining guesses: {remainingGuesses}</p> // Näytä jäljellä olevien arvausten määrä, jos arvauksia on vielä jäljellä
+        )}
+
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Country</th>
+            <th>Team</th>
+            <th>Age</th>
+            <th>Role</th>
+            <th>Earnings</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-);
+        </thead>
+        <tbody>
+          {guesses.map((player, index) => (
+            <tr key={index}>
+              <td className={player.name === hardcodedPlayer.name ? 'correct-guess' : 'incorrect-guess'}>{player.name}</td>
+              <td className={player.country === hardcodedPlayer.country ? 'correct-guess' : 'incorrect-guess'}>{player.country}</td>
+              <td className={player.team === hardcodedPlayer.team ? 'correct-guess' : 'incorrect-guess'}>{player.team}</td>
+              <td className={player.age === hardcodedPlayer.age ? 'correct-guess' : 'incorrect-guess'}>
+                {player.age} {player.age === hardcodedPlayer.age ? '' : player.age > hardcodedPlayer.age ? <FontAwesomeIcon icon={faArrowDown} /> : <FontAwesomeIcon icon={faArrowUp} />}
+              </td>
+              <td className={player.role === hardcodedPlayer.role ? 'correct-guess' : 'incorrect-guess'}>{player.role}</td>
+              <td className={player.total_winnings === hardcodedPlayer.total_winnings ? 'correct-guess' : 'incorrect-guess'}>
+                {player.total_winnings} $ {player.total_winnings === hardcodedPlayer.total_winnings ? '' : player.total_winnings > hardcodedPlayer.total_winnings ? <FontAwesomeIcon icon={faArrowDown} /> : <FontAwesomeIcon icon={faArrowUp} />}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {showAnswer && (
+        <div>
+          <p>Correct answer:</p>
+          <table>
+            <tbody>
+              <tr>
+                <td className='correct-guess'>{hardcodedPlayer.name}</td>
+                <td className='correct-guess'>{hardcodedPlayer.country}</td>
+                <td className='correct-guess'>{hardcodedPlayer.team}</td>
+                <td className='correct-guess'>{hardcodedPlayer.age}</td>
+                <td className='correct-guess'>{hardcodedPlayer.role}</td>
+                <td className='correct-guess'>{hardcodedPlayer.total_winnings} $</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default Game;

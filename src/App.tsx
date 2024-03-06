@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Routes, useNavigate } from 'react-router-dom';
 import Profile from './components/Profile';
 import Leaderboard from './components/Leaderboard';
 import Game from './components/Game';
@@ -7,7 +7,6 @@ import Login from './components/Login';
 import Register from './components/Register';
 import { ApolloProvider } from '@apollo/client';
 import { ApolloClient, InMemoryCache } from '@apollo/client';
-
 import './styles/Navbar.css';
 
 const client = new ApolloClient({
@@ -15,8 +14,20 @@ const client = new ApolloClient({
   cache: new InMemoryCache()
 });
 
-function App() {
+const ProfileWrapper = () => {
+  const isAuthenticated = !!localStorage.getItem('token');
+  const navigate = useNavigate();
 
+  React.useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/Login');
+    }
+  }, [isAuthenticated, navigate]);
+
+  return isAuthenticated ? <Profile /> : null;
+};
+
+function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -57,10 +68,10 @@ function App() {
       <ApolloProvider client={client}>
         <Routes >
           <Route path="/" element={<Game />} />
-          <Route path="/Profile" element={<Profile />} />
           <Route path="/Leaderboard" element={<Leaderboard />} />
           <Route path="/Login" element={<Login setIsLoggedIn={setIsLoggedIn}/>} />
           <Route path="/Register" element={<Register setIsLoggedIn={setIsLoggedIn}/>} />
+          <Route path="/Profile" element={<ProfileWrapper />} />
         </Routes>
       </ApolloProvider>
       </div>

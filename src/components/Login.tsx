@@ -15,7 +15,7 @@ const LOGIN_MUTATION = gql`
   }
 `;
 
-const Login: React.FC<{onLogin: () => void;}> = ({onLogin}) => {
+const Login: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -29,7 +29,6 @@ const Login: React.FC<{onLogin: () => void;}> = ({onLogin}) => {
 
       if (data) {
         console.log('Logged in:', data);
-        onLogin();
       }
 
     } catch (error) {

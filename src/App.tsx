@@ -16,28 +16,9 @@ const client = new ApolloClient({
 });
 
 function App() {
-  // Sample data for the Profile and Leaderboard components
-  const userProfile = { name: 'John Doe', email: 'john.doe@example.com' };
-  const userScores = [
-    { name: 'Alice', score: 100 },
-    { name: 'Bob', score: 200 },
-    { name: 'Charlie', score: 150 },
-  ];
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const handleLogin = () => {
-    // Kirjautumisen käsittelijä
-    setIsLoggedIn(true);
-  };
-
-  const handleLogout = () => {
-    // Uloskirjautumisen käsittelijä
-    setIsLoggedIn(false);
-  };
-
-  
-// ad title to the page
   return (
     <Router>
       <div>
@@ -70,14 +51,15 @@ function App() {
       <ApolloProvider client={client}>
         <Routes >
           <Route path="/" element={<Game />} />
-          <Route path="/Profile" element={<Profile name={userProfile.name} email={userProfile.email} />} />
-          <Route path="/Leaderboard" element={<Leaderboard scores={userScores} />} />
-          <Route path="/Login" element={<Login onLogin={handleLogin} />} />
-          <Route path="/Register" element={<Register onLogin={handleLogin}/>} />
+          <Route path="/Profile" element={<Profile />} />
+          <Route path="/Leaderboard" element={<Leaderboard />} />
+          <Route path="/Login" element={<Login />} />
+          <Route path="/Register" element={<Register />} />
         </Routes>
       </ApolloProvider>
       </div>
     </Router>
   );
 }
+
 export default App;

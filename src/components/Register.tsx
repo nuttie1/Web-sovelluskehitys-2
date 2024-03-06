@@ -14,7 +14,7 @@ const REGISTER_MUAATION = gql`
   }
 `;
 
-const RegisterPage: React.FC<{onLogin: () => void;}> = ({onLogin}) => {
+const RegisterPage: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -23,16 +23,15 @@ const RegisterPage: React.FC<{onLogin: () => void;}> = ({onLogin}) => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const { data } = await register({variables: { username, password } });
-
-      if (data) {
-        console.log('Registered:', data);
-        onLogin();
-      }
+      await register({variables: { username, password } });
     } catch (error) {
       console.error('Error registering:', error);
     }
   };
+
+  if (loading) return <p>Registering...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+  if (data) console.log('Registered:', data);
 
   return (
     <div className="register-form-container">

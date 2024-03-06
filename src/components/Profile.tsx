@@ -2,12 +2,12 @@ import React from 'react';
 
 import '../styles/Profile.css';
 
-interface UserProfile {
-  name: string;
-  email: string;
-}
 
-const Profile: React.FC<UserProfile> = ({ name, email }) => {
+const Profile: React.FC = () => {
+
+  const name = "John Doe";
+  const email = "example@mail";
+
   return (
     <div className="profile-container">
       <h1 className="profile-title">{name}</h1>

@@ -20,7 +20,7 @@ input RegisterInput {
 }
 
 input LoginInput {
-    username: String!
+    user_name: String!
     password: String!
 }
 

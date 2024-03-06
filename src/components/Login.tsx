@@ -29,6 +29,7 @@ const Login: React.FC = () => {
 
       if (data) {
         console.log('Logged in:', data);
+        localStorage.setItem('token', data.login.token);
       }
 
     } catch (error) {

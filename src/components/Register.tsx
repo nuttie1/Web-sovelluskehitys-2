@@ -24,6 +24,10 @@ const RegisterPage: React.FC = () => {
     event.preventDefault();
     try {
       await register({variables: { username, password } });
+      if (data) {
+        console.log('Registered:', data);
+        localStorage.setItem('token', data.register.token);
+      }
     } catch (error) {
       console.error('Error registering:', error);
     }

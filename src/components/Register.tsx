@@ -1,5 +1,5 @@
 import {useMutation, gql} from '@apollo/client';
-import React, { useState } from 'react';
+import React, { useState,Dispatch, SetStateAction } from 'react';
 
 import '../styles/Register.css';
 
@@ -14,7 +14,11 @@ const REGISTER_MUAATION = gql`
   }
 `;
 
-const RegisterPage: React.FC = () => {
+interface IsUserLoggedIn {
+  setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
+}
+
+const RegisterPage: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -27,6 +31,7 @@ const RegisterPage: React.FC = () => {
       if (data) {
         console.log('Registered:', data);
         localStorage.setItem('token', data.register.token);
+        setIsLoggedIn(true);
       }
     } catch (error) {
       console.error('Error registering:', error);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
 import Profile from './components/Profile';
 import Leaderboard from './components/Leaderboard';
@@ -18,6 +18,12 @@ const client = new ApolloClient({
 function App() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   return (
     <Router>
@@ -53,8 +59,8 @@ function App() {
           <Route path="/" element={<Game />} />
           <Route path="/Profile" element={<Profile />} />
           <Route path="/Leaderboard" element={<Leaderboard />} />
-          <Route path="/Login" element={<Login />} />
-          <Route path="/Register" element={<Register />} />
+          <Route path="/Login" element={<Login setIsLoggedIn={setIsLoggedIn}/>} />
+          <Route path="/Register" element={<Register setIsLoggedIn={setIsLoggedIn}/>} />
         </Routes>
       </ApolloProvider>
       </div>

@@ -1,5 +1,5 @@
 import {useMutation, gql} from '@apollo/client';
-import React, { useState } from 'react';
+import React, { useState,Dispatch, SetStateAction } from 'react';
 
 import '../styles/Login.css';
 
@@ -15,7 +15,11 @@ const LOGIN_MUTATION = gql`
   }
 `;
 
-const Login: React.FC = () => {
+interface IsUserLoggedIn {
+  setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
+}
+
+const Login: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -30,6 +34,7 @@ const Login: React.FC = () => {
       if (data) {
         console.log('Logged in:', data);
         localStorage.setItem('token', data.login.token);
+        setIsLoggedIn(true);
       }
 
     } catch (error) {

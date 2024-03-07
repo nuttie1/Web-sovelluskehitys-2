@@ -27,6 +27,7 @@ input LoginInput {
 input UpdateUserInput {
     user_name: String
     password: String
+    points: Int
 }
 
 type Query {

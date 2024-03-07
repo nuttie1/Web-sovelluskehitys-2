@@ -22,6 +22,7 @@ interface IsUserLoggedIn {
 const Login: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [errorText, setErrorText] = useState('');
 
   const [login, { data, loading, error }] = useMutation(LOGIN_MUTATION);
 
@@ -39,13 +40,14 @@ const Login: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
 
     } catch (error) {
       console.error('Error logging in:', error);
+      setErrorText('Invalid username or password!');
     }
-    console.log(`Logging in with username: ${username} and password: ${password}`);
   };
 
   return (
     <div className="login-form-container">
       <form onSubmit={handleSubmit} className="login-form">
+      <p className="error-text">{errorText}</p>
         <label className="login-label">
           Username:
           <input

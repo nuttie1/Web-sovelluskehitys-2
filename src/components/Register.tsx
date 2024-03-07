@@ -1,5 +1,6 @@
 import {useMutation, gql} from '@apollo/client';
 import React, { useState,Dispatch, SetStateAction } from 'react';
+import Filter from 'bad-words';
 
 import '../styles/Register.css';
 
@@ -14,6 +15,7 @@ const REGISTER_MUAATION = gql`
   }
 `;
 
+
 interface IsUserLoggedIn {
   setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
 }
@@ -21,12 +23,32 @@ interface IsUserLoggedIn {
 const RegisterPage: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [errorText, setErrorText] = useState('');
 
   const [register, { data, loading, error }] = useMutation(REGISTER_MUAATION);
+
+  const checkUsername = (username: string) => {
+    const usernamePattern = new RegExp('^[a-zA-Z0-9](_(?!(\.|_))|\.(?!(_|\.))|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$');
+      if (!usernamePattern.test(username)) {
+        setErrorText('Username is too long/short or contains invalid characters!');
+        return false;
+      }
+      const filter = new Filter();
+      if (filter.isProfane(username)) {
+        setErrorText('Username contains profanity!');
+        return false;
+      }
+      return true;
+  }
+  
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
+      if (!checkUsername(username)) {
+        return;
+      }
+
       await register({variables: { username, password } });
       if (data) {
         console.log('Registered:', data);
@@ -45,6 +67,7 @@ const RegisterPage: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
   return (
     <div className="register-form-container">
       <h1 className="register-title">Create account</h1>
+      <p className="error-text">{errorText}</p>
         <form onSubmit={handleSubmit} className="register-form">
           <label className="register-label">
             Username:

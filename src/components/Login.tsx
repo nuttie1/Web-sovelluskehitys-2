@@ -2,6 +2,7 @@ import {useMutation, gql} from '@apollo/client';
 import React, { useState,Dispatch, SetStateAction } from 'react';
 
 import '../styles/Login.css';
+import client from '../client';
 
 const LOGIN_MUTATION = gql`
   mutation Login($username: String!, $password: String!) {
@@ -31,7 +32,7 @@ const Login: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
     try {
       const { data } = await login({variables: { username, password } });
 
-      if (data) {
+      if (data?.login?.token) {
         console.log('Logged in:', data);
         localStorage.setItem('token', data.login.token);
         setIsLoggedIn(true);

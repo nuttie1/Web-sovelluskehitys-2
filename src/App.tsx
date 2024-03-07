@@ -5,12 +5,27 @@ import Leaderboard from './components/Leaderboard';
 import Game from './components/Game';
 import Login from './components/Login';
 import Register from './components/Register';
-import { ApolloProvider } from '@apollo/client';
+import { ApolloProvider, createHttpLink } from '@apollo/client';
 import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import './styles/Navbar.css';
 
+const httpLink = createHttpLink({
+  uri: process.env.REACT_APP_GRAPHQL_ENDPOINT
+});
+
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem('token');
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : ''
+    }
+  }
+});
+
 const client = new ApolloClient({
-  uri: process.env.REACT_APP_GRAPHQL_ENDPOINT,
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache()
 });
 

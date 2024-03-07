@@ -1,12 +1,26 @@
 import React from 'react';
+import { gql, useQuery } from '@apollo/client';
 
 import '../styles/Profile.css';
 
+const GET_USER = gql` 
+  query CheckToken {
+    checkToken {
+      user {
+        id
+        user_name
+        points
+      }
+    }
+  }
+`;
 
 const Profile: React.FC = () => {
+  const { loading, error, data } = useQuery(GET_USER);
+  console.log(data);
 
-  const name = "John Doe";
-  const email = "example@mail";
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error</p>;
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -15,9 +29,8 @@ const Profile: React.FC = () => {
 
   return (
     <div className="profile-container">
-      <h1 className="profile-title">{name}</h1>
-      <p className="profile-email">{email}</p>
-      <p className="profile-points">Your points: 0</p>
+      <h1 className="profile-title">{data.checkToken.user.user_name}</h1>
+      <p className="profile-points">{data.checkToken.user.points}</p>
       <button onClick={handleLogout} className="logout-button">Logout</button>
     </div>
   );

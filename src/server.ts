@@ -11,5 +11,6 @@ const port = process.env.PORT || 4000;
       });
     } catch (error) {
       console.error('Error starting server', error);
+      console.error('Port:', port);
     }
   })();

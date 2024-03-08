@@ -3,9 +3,9 @@ import { Document, Types } from 'mongoose';
 type User = Partial<Document> & {
     id: Types.ObjectId | string;
     user_name: string;
-    email: string;
     role: "user" | "admin";
     password: string;
+    points: number;
 };
 
 type UserOutput = Omit<User, 'password' | 'role'>;

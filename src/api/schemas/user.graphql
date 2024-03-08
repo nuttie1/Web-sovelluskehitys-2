@@ -14,6 +14,10 @@ type UserResponse {
     user: User!
 }
 
+type VerifyPasswordResponse {
+    message: String!
+}
+
 input RegisterInput {
     user_name: String!
     password: String!
@@ -33,12 +37,12 @@ input UpdateUserInput {
 type Query {
     users: [User]
     userById(id: ID!): User
-    checkToken: UserResponse
-}
+    checkToken: UserResponse}
 
 type Mutation {
     register( user : RegisterInput! ): UserResponse
     login( loginInput : LoginInput! ): LoginResponse
     updateUser( user: UpdateUserInput! ): User
     deleteUser: UserResponse
+    verifyPassword(user_name: String!, password: String!): Boolean
 }

@@ -27,17 +27,21 @@ const Login: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
   const [login, { data, loading, error }] = useMutation(LOGIN_MUTATION);
 
   const handleSubmit = async (event: React.FormEvent) => {
-    console.log('Logging in...');
     event.preventDefault();
+
+    if (username === "" || password === "") {
+      setErrorText("Username/Password is empty!");
+      return;
+    }
+
     try {
       const { data } = await login({variables: { username, password } });
 
       if (data?.login?.token) {
-        console.log('Logged in:', data);
         localStorage.setItem('token', data.login.token);
         setIsLoggedIn(true);
       }
-
+      setErrorText("");
     } catch (error) {
       console.error('Error logging in:', error);
       setErrorText('Invalid username or password!');

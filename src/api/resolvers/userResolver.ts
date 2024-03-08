@@ -67,5 +67,16 @@ export default {
                 }
             );
         },
+        verifyPassword: async (_parent: undefined, args: {user_name: string, password: string}) => {
+            console.log(args);
+            return await fetchData<UserOutput>(
+                `${process.env.AUTH_URL}/users/username/${args.user_name}`,
+                {
+                    method : "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(args)
+                },
+            );
+        },
     }
 };

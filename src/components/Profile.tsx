@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { gql, useQuery, useMutation } from '@apollo/client';
+import React, { useState, useEffect } from 'react';
+import { gql, useQuery, useMutation, ApolloError } from '@apollo/client';
 import { checkUsername, checkPassword } from '../functions/checkData';
 
 
@@ -20,8 +20,9 @@ const GET_USER = gql`
 const UPDATE_USER = gql`
   mutation UpdateUser($user: UpdateUserInput!) {
     updateUser(user: $user) {
-        id
+      user {
         user_name
+      }
     }
   }
 `;
@@ -31,7 +32,6 @@ const VERIFY_PASSWORD = gql`
     verifyPassword(user_name: $username, password: $password)
   }
 `;
-
 
 const Profile: React.FC = () => {
   const { loading, error, data } = useQuery(GET_USER);
@@ -52,14 +52,14 @@ const Profile: React.FC = () => {
 
   const handleUsernameUpdate = async (event: React.FormEvent) => {
     event.preventDefault();
-
     try {
       if (!checkUsername(newUsername).valid) {
         setErrorTextUsername(checkUsername(newUsername).message);
         return;
       }
-      //const { data } = await updateUser({variables: { user: {user_name: newUsername} } });
+      await updateUser({variables: { user: {user_name: newUsername} } });
       setErrorTextUsername("");
+      setNewUsername("");
       setShowModal(false);
     } catch (error) {
       console.error('Error updating user:', error);
@@ -75,22 +75,32 @@ const Profile: React.FC = () => {
         setErrorTextNewPassword(checkPassword(newPassword).message);
         return;
       }
-
       const { data: verifyData } = await verifyPassword({variables: {username: data.checkToken.user.user_name, password: oldPassword}});
 
       if (!verifyData.verifyPassword) {
         setErrorTextOldPassword("Password doesn't match!");
         return;
       }
-      //await updateUser({variables: { user: {password: newPassword} } });
+      await updateUser({variables: { user: {password: newPassword} } });
       setErrorTextOldPassword("");
       setErrorTextNewPassword("");
+      setOldPassword("");
+      setNewPassword("");
       setShowModal(false);
     } catch (error) {
       console.error('Error updating user:', error);
+      if ((error as ApolloError).graphQLErrors) {
+        (error as ApolloError).graphQLErrors.map(({ message, locations, path }) =>
+          console.log(
+            `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+          )
+        );
+      }
+      if ((error as ApolloError).networkError) {
+        console.log(`[Network error]: ${(error as ApolloError).networkError}`);
+      }
     }
   }
-
   const handleLogout = () => {
     localStorage.removeItem('token');
     window.location.reload();
@@ -108,7 +118,7 @@ const Profile: React.FC = () => {
         <button onClick={() => setShowModal(false)} className="close-button">Close</button>
           <h2 className="profile-title-form">Update your data</h2>
           <p className="error-text">{errorTextUsername}</p>
-          <form className="updateUser-form">
+          <form className="updateUser-form" onSubmit={handleUsernameUpdate}>
            <label>
              Username:
              <input type="text" 
@@ -117,8 +127,10 @@ const Profile: React.FC = () => {
                 className="update-input"
               />
             </label>
-            <button type="submit" onClick={handleUsernameUpdate} className="update-button">Update</button>
+            <button type="submit" className="update-button">Update</button>
+            </form>
             <p className="error-text">{errotTextOldPassword}</p>
+            <form className="updateUser-form" onSubmit={handlePasswordUpdate}>
             <label>
               Old Password:
               <input type="password" 
@@ -136,7 +148,7 @@ const Profile: React.FC = () => {
                 className="update-input"
               />
             </label>
-              <button type="submit" onClick={handlePasswordUpdate} className="update-button">Update</button>
+            <button type="submit" onClick={handlePasswordUpdate} className="update-button">Update</button>
           </form>
         </div>
         </div>

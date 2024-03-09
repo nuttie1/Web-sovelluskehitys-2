@@ -42,7 +42,7 @@ type Query {
 type Mutation {
     register( user : RegisterInput! ): UserResponse
     login( loginInput : LoginInput! ): LoginResponse
-    updateUser( user: UpdateUserInput! ): User
+    updateUser( user: UpdateUserInput! ): UserResponse
     deleteUser: UserResponse
     verifyPassword(user_name: String!, password: String!): Boolean
 }

@@ -15,7 +15,6 @@ const REGISTER_MUAATION = gql`
   }
 `;
 
-
 interface IsUserLoggedIn {
   setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
 }

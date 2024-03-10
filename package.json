@@ -39,10 +39,11 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "npm run dev && react-scripts start",
+    "start": "npm run graphql & react-scripts start",
     "build": "CI=false && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "graphql": "ts-node src/server.ts",
     "dev": "nodemon src/server.ts"
   },
   "eslintConfig": {

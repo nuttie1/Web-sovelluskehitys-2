@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useQuery, gql } from '@apollo/client';
 
 import '../styles/Leaderboard.css';
@@ -22,7 +22,11 @@ const GET_LEADERBOARD = gql`
 `;
 
 const Leaderboard: React.FC = () => {
-  const { loading, error, data } = useQuery<LeaderboardData>(GET_LEADERBOARD);
+  const { loading, error, data, refetch } = useQuery<LeaderboardData>(GET_LEADERBOARD);
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;

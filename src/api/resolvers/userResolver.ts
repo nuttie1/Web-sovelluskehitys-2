@@ -13,7 +13,7 @@ export default {
         },
         userById: async (_parent: undefined, args: {id: string}) => {
             return await fetchData<UserOutput>(
-                `${process.env.AUTH_URL}/users${args.id}`
+                `${process.env.AUTH_URL}/users/${args.id}`
             );
         },
         checkToken: async (_parent: undefined, _args: undefined, context: MyContext) => {

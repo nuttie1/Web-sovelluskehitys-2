@@ -5,23 +5,31 @@ import { checkUsername, checkPassword } from '../functions/checkData';
 
 import '../styles/Profile.css';
 
-const GET_USER = gql` 
+const GET_ID = gql` 
   query CheckToken {
     checkToken {
       user {
         id
-        user_name
-        points
       }
     }
   }
 `;
+
+const GET_USER = gql` 
+  query GetUserById($id: ID!) {
+    userById(id: $id) { 
+      user_name
+      points 
+    }
+  }
+`
 
 const UPDATE_USER = gql`
   mutation UpdateUser($user: UpdateUserInput!) {
     updateUser(user: $user) {
       user {
         user_name
+        points
       }
     }
   }
@@ -34,8 +42,15 @@ const VERIFY_PASSWORD = gql`
 `;
 
 const Profile: React.FC = () => {
-  const { loading, error, data } = useQuery(GET_USER);
-  const [updateUser ] = useMutation(UPDATE_USER);
+  const { loading, error, data } = useQuery(GET_ID);
+
+  const id = data?.checkToken?.user?.id;
+  const { data: userData, loading: userLoading, error: userError, refetch } = useQuery(GET_USER, {
+    variables: { id },
+    skip: !id || id === null,
+  });
+
+  const [updateUser] = useMutation(UPDATE_USER);
   const [verifyPassword] = useMutation(VERIFY_PASSWORD);
 
   const [showModal, setShowModal] = useState(false);
@@ -44,11 +59,14 @@ const Profile: React.FC = () => {
   const [newPassword, setNewPassword] = useState('');
 
   const [errorTextUsername, setErrorTextUsername] = useState('');
-  const [errotTextOldPassword, setErrorTextOldPassword] = useState('');
-  const [errotTextNewPassword, setErrorTextNewPassword] = useState('');
+  const [errorTextOldPassword, setErrorTextOldPassword] = useState('');
+  const [errorTextNewPassword, setErrorTextNewPassword] = useState('');
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error</p>;
+  if (userLoading) return <p>Loading...</p>;
+  if (userError) return <p>Error: {userError.message}</p>;
+
+  if (!userData || !userData.userById) return <p>No user data</p>;
+
 
   const handleUsernameUpdate = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -58,6 +76,7 @@ const Profile: React.FC = () => {
         return;
       }
       await updateUser({variables: { user: {user_name: newUsername} } });
+      refetch();
       setErrorTextUsername("");
       setNewUsername("");
       setShowModal(false);
@@ -82,6 +101,7 @@ const Profile: React.FC = () => {
         return;
       }
       await updateUser({variables: { user: {password: newPassword} } });
+      refetch();
       setErrorTextOldPassword("");
       setErrorTextNewPassword("");
       setOldPassword("");
@@ -108,8 +128,8 @@ const Profile: React.FC = () => {
 
   return (
     <div className="profile-container">
-      <h1 className="profile-title">{data.checkToken.user.user_name}</h1>
-      <p className="profile-points">{data.checkToken.user.points}</p>
+      <h1 className="profile-title">{userData.userById.user_name}</h1>
+      <p className="profile-points">{userData.userById.points}</p>
       <button onClick={() => setShowModal(true)} className="update-button">Update</button>
       <button onClick={handleLogout} className="update-button">Logout</button>
       {showModal && (
@@ -129,7 +149,7 @@ const Profile: React.FC = () => {
             </label>
             <button type="submit" className="update-button">Update</button>
             </form>
-            <p className="error-text">{errotTextOldPassword}</p>
+            <p className="error-text">{errorTextOldPassword}</p>
             <form className="updateUser-form" onSubmit={handlePasswordUpdate}>
             <label>
               Old Password:
@@ -139,7 +159,7 @@ const Profile: React.FC = () => {
                 className="update-input"
               />
             </label>
-            <p className="error-text">{errotTextNewPassword}</p>
+            <p className="error-text">{errorTextNewPassword}</p>
             <label>
               New Password: 
               <input type="password"
@@ -148,7 +168,7 @@ const Profile: React.FC = () => {
                 className="update-input"
               />
             </label>
-            <button type="submit" onClick={handlePasswordUpdate} className="update-button">Update</button>
+            <button type="submit"className="update-button" >Update</button>
           </form>
         </div>
         </div>

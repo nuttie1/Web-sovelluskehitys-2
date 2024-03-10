@@ -1,5 +1,6 @@
 import {useMutation, gql} from '@apollo/client';
 import React, { useState,Dispatch, SetStateAction } from 'react';
+import {useNavigate} from 'react-router-dom';
 
 import '../styles/Login.css';
 
@@ -26,6 +27,8 @@ const Login: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
 
   const [login, { data, loading, error }] = useMutation(LOGIN_MUTATION);
 
+  const navigate = useNavigate();
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -40,6 +43,7 @@ const Login: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
       if (data?.login?.token) {
         localStorage.setItem('token', data.login.token);
         setIsLoggedIn(true);
+        navigate('/')
       }
       setErrorText("");
     } catch (error) {

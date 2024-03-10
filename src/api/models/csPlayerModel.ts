@@ -4,7 +4,7 @@ import exp from "constants";
 
 const csPlayerModel = new mongoose.Schema<csPlayer>({
     name: {
-        tpye: String,
+        type: String,
         required: true
     },
     team: {

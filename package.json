@@ -39,13 +39,15 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "npm run dev & react-scripts start",
-    "start-win": "concurrently \"npm run dev\" \"react-scripts start\"",
+    "help-prod": "echo In prod React doesn't need to be started only built as the pages are STATIC. Only -npm run dev- is needed. Dumbass took way too long to realize this. (not fun)",
+    "start": "npm run graphql",
+    "start-osx": "npm run graphql & react-scripts start",
+    "start-win": "concurrently \"npm run graphql\" \"react-scripts start\"",
     "build:api": "tsc",
     "build": "CI=false && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "dev": "nodemon src/server.ts"
+    "graphql": "nodemon src/server.ts"
   },
   "eslintConfig": {
     "extends": [

@@ -1,0 +1,30 @@
+
+type CsPlayer {
+    id: ID!
+    name: String!
+    team: String!
+    country: String!
+    age: Int!
+    role: String!
+    total_winnings: Int!
+}
+
+type Query {
+    allCsPlayers: [CsPlayer]
+    getCsPlayerById(id: ID!): CsPlayer
+    getCsPlayerByName(name: String!): CsPlayer
+}
+
+input CsPlayerInput {
+    name: String!
+    team: String!
+    country: String!
+    age: Int!
+    role: String!
+    total_winnings: Int!
+}
+
+type Mutation {
+    createCsPlayer(input: CsPlayerInput!): CsPlayer
+    deleteCsPlayer(id: ID!): CsPlayer
+}

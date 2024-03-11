@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { csPlayer } from '../types/DBTypes';
+import React, {useState} from 'react';
+import {csPlayer} from '../types/DBTypes';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faArrowUp, faArrowDown} from '@fortawesome/free-solid-svg-icons';
 import {useMutation, useQuery, gql} from '@apollo/client';
@@ -34,6 +34,20 @@ const ADD_POINTS_MUTATION = gql`
   }
 `;
 
+const GET_CS_PLAYER = gql`
+  query GetCsPlayerByName($name: String!) {
+    getCsPlayerByName(name: $name) {
+      id
+      name
+      country
+      team
+      age
+      role
+      total_winnings
+    }
+  }
+`;
+
 function Game() {
   const [guess, setGuess] = useState('');
   const [guesses, setGuesses] = useState<csPlayer[]>([]);
@@ -49,15 +63,26 @@ function Game() {
     skip: !id || id === null,
   });
 
-  // Hardcoded player for testing
-  const hardcodedPlayer: csPlayer = {
-    id: "1",
-    name: "s1mple",
-    country: "Ukraine",
-    team: "Falcons",
-    age: 26,
-    role: "rifler",
-    total_winnings: 1726000,
+  // Player of the day (Name hardcoded for now, will be randomized later on)
+  const playerName = "donk";
+  const {data: playerOfTheDayData} = useQuery(GET_CS_PLAYER, {
+    variables: { name: playerName },
+  });
+
+  // Guessed player
+  const {data: guessedPlayerData, refetch: refetchGuessedPlayer } = useQuery(GET_CS_PLAYER, {
+    variables: { name: guess },
+    skip: !guess,
+  });
+
+  const playerOfTheDay: csPlayer = {
+    id: playerOfTheDayData?.getCsPlayerByName.id,
+    name: playerOfTheDayData?.getCsPlayerByName.name,
+    country: playerOfTheDayData?.getCsPlayerByName.country,
+    team: playerOfTheDayData?.getCsPlayerByName.team,
+    age: playerOfTheDayData?.getCsPlayerByName.age,
+    role: playerOfTheDayData?.getCsPlayerByName.role,
+    total_winnings: playerOfTheDayData?.getCsPlayerByName.total_winnings,
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,19 +92,19 @@ function Game() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // Hardcoded guess for testing
+    refetchGuessedPlayer()
     const guessedPlayer: csPlayer = {
-      id: "2",
-      name: guess,
-      country: "Finland",
-      team: "JANO",
-      age: 20,
-      role: "rifler",
-      total_winnings: 15,
+      id: guessedPlayerData?.getCsPlayerByName.id,
+      name: guessedPlayerData?.getCsPlayerByName.name,
+      country: guessedPlayerData?.getCsPlayerByName.country,
+      team: guessedPlayerData?.getCsPlayerByName.team,
+      age: guessedPlayerData?.getCsPlayerByName.age,
+      role: guessedPlayerData?.getCsPlayerByName.role,
+      total_winnings: guessedPlayerData?.getCsPlayerByName.total_winnings,
     };
 
     // Tarkista, osuiko arvaus oikeaan pelaajaan
-    const isCorrectGuess = guessedPlayer.name === hardcodedPlayer.name;
+    const isCorrectGuess = guessedPlayer.name === playerOfTheDay.name;
       if (isCorrectGuess) {
         await refetch();
         const newPoints = userData.userById.points + remainingGuesses;
@@ -145,15 +170,15 @@ function Game() {
         <tbody>
           {guesses.map((player, index) => (
             <tr key={index}>
-              <td className={player.name === hardcodedPlayer.name ? 'correct-guess' : 'incorrect-guess'}>{player.name}</td>
-              <td className={player.country === hardcodedPlayer.country ? 'correct-guess' : 'incorrect-guess'}>{player.country}</td>
-              <td className={player.team === hardcodedPlayer.team ? 'correct-guess' : 'incorrect-guess'}>{player.team}</td>
-              <td className={player.age === hardcodedPlayer.age ? 'correct-guess' : 'incorrect-guess'}>
-                {player.age} {player.age === hardcodedPlayer.age ? '' : player.age > hardcodedPlayer.age ? <FontAwesomeIcon icon={faArrowDown} /> : <FontAwesomeIcon icon={faArrowUp} />}
+              <td className={player.name === playerOfTheDay.name ? 'correct-guess' : 'incorrect-guess'}>{player.name}</td>
+              <td className={player.country === playerOfTheDay.country ? 'correct-guess' : 'incorrect-guess'}>{player.country}</td>
+              <td className={player.team === playerOfTheDay.team ? 'correct-guess' : 'incorrect-guess'}>{player.team}</td>
+              <td className={player.age === playerOfTheDay.age ? 'correct-guess' : 'incorrect-guess'}>
+                {player.age} {player.age === playerOfTheDay.age ? '' : player.age > playerOfTheDay.age ? <FontAwesomeIcon icon={faArrowDown} /> : <FontAwesomeIcon icon={faArrowUp} />}
               </td>
-              <td className={player.role === hardcodedPlayer.role ? 'correct-guess' : 'incorrect-guess'}>{player.role}</td>
-              <td className={player.total_winnings === hardcodedPlayer.total_winnings ? 'correct-guess' : 'incorrect-guess'}>
-                {player.total_winnings} $ {player.total_winnings === hardcodedPlayer.total_winnings ? '' : player.total_winnings > hardcodedPlayer.total_winnings ? <FontAwesomeIcon icon={faArrowDown} /> : <FontAwesomeIcon icon={faArrowUp} />}
+              <td className={player.role === playerOfTheDay.role ? 'correct-guess' : 'incorrect-guess'}>{player.role}</td>
+              <td className={player.total_winnings === playerOfTheDay.total_winnings ? 'correct-guess' : 'incorrect-guess'}>
+                {player.total_winnings} $ {player.total_winnings === playerOfTheDay.total_winnings ? '' : player.total_winnings > playerOfTheDay.total_winnings ? <FontAwesomeIcon icon={faArrowDown} /> : <FontAwesomeIcon icon={faArrowUp} />}
               </td>
             </tr>
           ))}
@@ -165,12 +190,12 @@ function Game() {
           <table>
             <tbody>
               <tr>
-                <td className='correct-guess'>{hardcodedPlayer.name}</td>
-                <td className='correct-guess'>{hardcodedPlayer.country}</td>
-                <td className='correct-guess'>{hardcodedPlayer.team}</td>
-                <td className='correct-guess'>{hardcodedPlayer.age}</td>
-                <td className='correct-guess'>{hardcodedPlayer.role}</td>
-                <td className='correct-guess'>{hardcodedPlayer.total_winnings} $</td>
+                <td className='correct-guess'>{playerOfTheDay.name}</td>
+                <td className='correct-guess'>{playerOfTheDay.country}</td>
+                <td className='correct-guess'>{playerOfTheDay.team}</td>
+                <td className='correct-guess'>{playerOfTheDay.age}</td>
+                <td className='correct-guess'>{playerOfTheDay.role}</td>
+                <td className='correct-guess'>{playerOfTheDay.total_winnings} $</td>
               </tr>
             </tbody>
           </table>

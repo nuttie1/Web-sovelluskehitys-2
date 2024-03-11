@@ -38,7 +38,8 @@
     "supertest": "^6.3.4",
     "ts-node": "^10.9.2",
     "typescript": "^4.9.5",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "@types/supertest": "^6.0.2"
   },
   "scripts": {
     "help-prod": "echo In prod React doesn't need to be started only built as the pages are STATIC. Only -npm run dev- is needed. Dumbass took way too long to realize this. (not fun)",
@@ -70,8 +71,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@types/supertest": "^6.0.2"
   }
 }

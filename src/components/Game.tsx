@@ -103,11 +103,9 @@ function Game() {
       role: guessedPlayerData?.getCsPlayerByName.role,
       total_winnings: guessedPlayerData?.getCsPlayerByName.total_winnings,
     };
-
+    
     if (guessedPlayer.name === playerOfTheDay.name) {
       setIsCorrectGuess(true);
-    }
-    if (isCorrectGuess) {
       await refetch();
       const newPoints = userData.userById.points + remainingGuesses;
       await addPoints({

@@ -12,6 +12,12 @@ export default {
         getCsPlayerByName: async (_parent: undefined, args: {name: string}) => {
             return await csPlayerModel.findOne({name: args.name});
         },
+        getRandomPlayer: async () => {
+            const count = await csPlayerModel.countDocuments();
+            const random = Math.floor(Math.random() * count);
+            const randomPlayer = await csPlayerModel.findOne().skip(random);
+            return randomPlayer;
+        },
     },
     Mutation: {
         createCsPlayer: async (_parent: undefined, args: {input: Omit<csPlayer, 'id'>}) => {

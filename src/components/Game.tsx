@@ -34,6 +34,20 @@ const ADD_POINTS_MUTATION = gql`
   }
 `;
 
+const GET_RANDOM_PLAYER = gql`
+  query GetRandomPlayer {
+    getRandomPlayer {
+      id
+      name
+      country
+      team
+      age
+      role
+      total_winnings
+    }
+  }
+`;
+
 const GET_CS_PLAYER = gql`
   query GetCsPlayerByName($name: String!) {
     getCsPlayerByName(name: $name) {
@@ -49,6 +63,7 @@ const GET_CS_PLAYER = gql`
 `;
 
 function Game() {
+  const {loading: playerLoading, error: playerError, data: randomPlayer } = useQuery(GET_RANDOM_PLAYER);
   const [guess, setGuess] = useState('');
   const [isCorrectGuess, setIsCorrectGuess] = useState(false);
   const [guesses, setGuesses] = useState<csPlayer[]>([]);
@@ -64,17 +79,24 @@ function Game() {
     skip: !id || id === null,
   });
 
-  // Player of the day (Name hardcoded for now, will be randomized later on)
-  const playerName = "donk";
-  const {data: playerOfTheDayData} = useQuery(GET_CS_PLAYER, {
-    variables: { name: playerName },
-  });
-
   // Guessed player
   const {data: guessedPlayerData, refetch: refetchGuessedPlayer } = useQuery(GET_CS_PLAYER, {
     variables: { name: guess },
     skip: !guess,
   });
+
+  // Player of the day
+  const {data: playerOfTheDayData} = useQuery(GET_CS_PLAYER, {
+    variables: { name: randomPlayer?.getRandomPlayer.name },
+  });
+
+  if (playerLoading) {
+    return <div>Loading...</div>;
+  }
+  
+  if (!playerOfTheDayData?.getCsPlayerByName) {
+    return <div>Error: Player not found</div>;
+  }
 
   const playerOfTheDay: csPlayer = {
     id: playerOfTheDayData?.getCsPlayerByName.id,
@@ -103,7 +125,7 @@ function Game() {
       role: guessedPlayerData?.getCsPlayerByName.role,
       total_winnings: guessedPlayerData?.getCsPlayerByName.total_winnings,
     };
-    
+
     if (guessedPlayer.name === playerOfTheDay.name) {
       setIsCorrectGuess(true);
       await refetch();

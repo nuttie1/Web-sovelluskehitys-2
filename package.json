@@ -43,14 +43,17 @@
   "scripts": {
     "help-prod": "echo In prod React doesn't need to be started only built as the pages are STATIC. Only -npm run dev- is needed. Dumbass took way too long to realize this. (not fun)",
     "start-prod": "node dist/server.js & pm2 serve /home/site/wwwroot/build --no-daemon --spa",
+    "build": "tsc && copyfiles -u 1 src/**/*.graphql dist && CI=false && react-scripts build",
     "start": "node dist/server.js",
+
+    "help-dev": "echo Dev environment 1st $npm run graphql 2nd $npm run start-react",
     "start-osx": "npm run graphql & react-scripts start",
     "start-win": "concurrently \"npm run graphql\" \"react-scripts start\"",
     "start-react": "react-scripts start",
-    "build": "tsc && copyfiles -u 1 src/**/*.graphql dist && CI=false && react-scripts build",
+    "graphql": "nodemon src/server.ts",
+    
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "graphql": "nodemon src/server.ts"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [

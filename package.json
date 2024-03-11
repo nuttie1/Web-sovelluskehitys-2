@@ -42,7 +42,6 @@
   },
   "scripts": {
     "help-prod": "echo In prod React doesn't need to be started only built as the pages are STATIC. Only -npm run dev- is needed. Dumbass took way too long to realize this. (not fun)",
-    "start-prod": "node dist/server.js & pm2 serve /home/site/wwwroot/build --no-daemon --spa",
     "build": "tsc && copyfiles -u 1 src/**/*.graphql dist && CI=false && react-scripts build",
     "start": "node dist/server.js",
 

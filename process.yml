@@ -1,0 +1,8 @@
+# For azure launch commands. Serves static pages ands starts the server.
+apps:
+  - script: /home/site/wwwroot/build
+    name: 'app'
+    exec_mode: 'cluster'
+    instances: max
+  - script: dist/server.js
+    name: 'server'

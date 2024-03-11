@@ -1,4 +1,3 @@
-require('dotenv').config();
 import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
@@ -15,6 +14,7 @@ import {
     ApolloServerPluginLandingPageProductionDefault,
   } from '@apollo/server/plugin/landingPage/default';
 import { notFound, errorHandler } from './middlewares';
+require('dotenv').config();
 
 const client = express();
 
@@ -59,6 +59,7 @@ client.use(
         client.use(errorHandler);
         } catch (error) {
             console.error('Error starting server', error);
+            return new Error('Error starting server' + error);
         }
     })();
 

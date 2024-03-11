@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import App from '../App';
+import React from 'react';
 
 // Test that the App.tsx renders correct navigation links
 test('renders navigation links', () => {

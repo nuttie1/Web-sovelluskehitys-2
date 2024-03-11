@@ -52,6 +52,7 @@
     "graphql": "nodemon src/server.ts",
     
     "test": "react-scripts test",
+    "test-graphql": "jest",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

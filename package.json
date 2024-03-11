@@ -36,16 +36,18 @@
     "react-scripts": "^5.0.1",
     "ts-node": "^10.9.2",
     "typescript": "^4.9.5",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "copyfiles": "^2.4.1"
+
   },
   "scripts": {
     "help-prod": "echo In prod React doesn't need to be started only built as the pages are STATIC. Only -npm run dev- is needed. Dumbass took way too long to realize this. (not fun)",
-    "start-prod" : "node dist/server.js & pm2 serve /home/site/wwwroot/build --no-daemon --spa",
+    "start-prod": "node dist/server.js & pm2 serve /home/site/wwwroot/build --no-daemon --spa",
     "start": "node dist/server.js",
     "start-osx": "npm run graphql & react-scripts start",
     "start-win": "concurrently \"npm run graphql\" \"react-scripts start\"",
     "start-react": "react-scripts start",
-    "build": "tsc && CI=false && react-scripts build",
+    "build": "tsc && copyfiles -u 1 src/**/*.graphql dist && CI=false && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "graphql": "nodemon src/server.ts"

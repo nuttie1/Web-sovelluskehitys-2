@@ -5,16 +5,24 @@ import {faArrowUp, faArrowDown} from '@fortawesome/free-solid-svg-icons';
 import {useMutation, useQuery, gql} from '@apollo/client';
 import '../styles/Game.css';
 
-
-const GET_USER = gql` 
+const GET_ID = gql` 
   query CheckToken {
     checkToken {
       user {
-        points
+        id
       }
     }
   }
 `;
+
+const GET_USER = gql` 
+  query GetUserById($id: ID!) {
+    userById(id: $id) { 
+      user_name
+      points 
+    }
+  }
+`
 
 const ADD_POINTS_MUTATION = gql`
   mutation UpdateUser($user: UpdateUserInput!) {
@@ -32,7 +40,14 @@ function Game() {
   const [remainingGuesses, setRemainingGuesses] = useState(8);
   const [showAnswer, setShowAnswer] = useState(false);
   const [addPoints] = useMutation(ADD_POINTS_MUTATION);
-  const {loading, error, data} = useQuery(GET_USER);
+
+  const { loading, error, data } = useQuery(GET_ID);
+
+  const id = data?.checkToken?.user?.id;
+  const { data: userData, loading: userLoading, error: userError, refetch } = useQuery(GET_USER, {
+    variables: { id },
+    skip: !id || id === null,
+  });
 
   // Hardcoded player for testing
   const hardcodedPlayer: csPlayer = {
@@ -66,7 +81,8 @@ function Game() {
     // Tarkista, osuiko arvaus oikeaan pelaajaan
     const isCorrectGuess = guessedPlayer.name === hardcodedPlayer.name;
       if (isCorrectGuess) {
-        const newPoints = data.checkToken.user.points + remainingGuesses;
+        await refetch();
+        const newPoints = userData.userById.points + remainingGuesses;
         await addPoints({
           variables: {
             user: {

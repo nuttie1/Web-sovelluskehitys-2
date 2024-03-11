@@ -129,8 +129,8 @@ const Profile: React.FC = () => {
   return (
     <div className="profile-container">
       <h1 className="profile-title">{userData.userById.user_name}</h1>
-      <p className="profile-points">{userData.userById.points}</p>
-      <button onClick={() => setShowModal(true)} className="update-button">Update</button>
+      <p className="profile-points">Your points: {userData.userById.points}</p>
+      <button onClick={() => setShowModal(true)} className="update-button">Edit</button>
       <button onClick={handleLogout} className="update-button">Logout</button>
       {showModal && (
         <div className="modal-background">

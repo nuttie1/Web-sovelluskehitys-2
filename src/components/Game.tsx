@@ -50,12 +50,13 @@ const GET_CS_PLAYER = gql`
 
 function Game() {
   const [guess, setGuess] = useState('');
+  const [isCorrectGuess, setIsCorrectGuess] = useState(false);
   const [guesses, setGuesses] = useState<csPlayer[]>([]);
   const [remainingGuesses, setRemainingGuesses] = useState(8);
   const [showAnswer, setShowAnswer] = useState(false);
   const [addPoints] = useMutation(ADD_POINTS_MUTATION);
-
-  const { loading, error, data } = useQuery(GET_ID);
+  const {loading, error, data} = useQuery(GET_ID);
+  const [showModal, setShowModal] = useState(false);
 
   const id = data?.checkToken?.user?.id;
   const { data: userData, loading: userLoading, error: userError, refetch } = useQuery(GET_USER, {
@@ -103,27 +104,27 @@ function Game() {
       total_winnings: guessedPlayerData?.getCsPlayerByName.total_winnings,
     };
 
-    // Tarkista, osuiko arvaus oikeaan pelaajaan
-    const isCorrectGuess = guessedPlayer.name === playerOfTheDay.name;
-      if (isCorrectGuess) {
-        await refetch();
-        const newPoints = userData.userById.points + remainingGuesses;
-        await addPoints({
-          variables: {
-            user: {
-              points: newPoints
-            }
+    if (guessedPlayer.name === playerOfTheDay.name) {
+      setIsCorrectGuess(true);
+    }
+    if (isCorrectGuess) {
+      await refetch();
+      const newPoints = userData.userById.points + remainingGuesses;
+      await addPoints({
+        variables: {
+          user: {
+            points: newPoints
           }
-        });
-        console.log('Correct guess! Points: ' + remainingGuesses);
-        setShowAnswer(true);
-      } else if (remainingGuesses === 1) {
-        setShowAnswer(true);
-        console.log('No more guesses left');
-      } else {
-        setRemainingGuesses(prev => prev - 1);
-        console.log('Incorrect guess');
-      }
+        }
+      });
+      setShowAnswer(true);
+      setShowModal(true);
+    } else if (remainingGuesses === 1) {
+      setShowAnswer(true);
+      setShowModal(true);
+    } else {
+      setRemainingGuesses(prev => prev - 1);
+    }
 
     setGuesses([...guesses, guessedPlayer]);
 
@@ -142,18 +143,18 @@ function Game() {
           onChange={handleChange}
           className="guess-input"
           placeholder="Enter your guess"
-          disabled={showAnswer} // Estä syötteen ottaminen, kun oikea vastaus on näytetty
+          disabled={showAnswer}
         />
         <input
           type="submit"
           value="Guess"
           className="guess-button"
-          disabled={showAnswer} // Estä arvauksen tekeminen, kun oikea vastaus on näytetty
+          disabled={showAnswer}
         />
       </form>
 
         {remainingGuesses > 0 && !showAnswer && (
-          <p>Remaining guesses: {remainingGuesses}</p> // Näytä jäljellä olevien arvausten määrä, jos arvauksia on vielä jäljellä
+          <p>Remaining guesses: {remainingGuesses}</p>
         )}
 
       <table>
@@ -199,6 +200,25 @@ function Game() {
               </tr>
             </tbody>
           </table>
+        </div>
+      )}
+      {showModal && (
+        <div className="modal-background">
+        <div className="modal">
+          <button onClick={() => setShowModal(false)} className="close-button">Close</button>
+          <h2 className="modal-title">Game over</h2>
+          {isCorrectGuess ? (
+            <div>
+              <p className="modal-text">Congratulations, you guessed correctly! The player was: {playerOfTheDay.name}</p>
+              <p className="modal-text">You got {remainingGuesses} points!</p>
+            </div>
+          ) : (
+            <div>
+              <p className="modal-text">Sorry, no more guesses left. The correct player was: {playerOfTheDay.name}</p>
+              <p className="modal-text">You got 0 points</p>
+            </div>
+          )}
+        </div>
         </div>
       )}
     </div>

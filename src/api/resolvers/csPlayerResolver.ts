@@ -18,6 +18,10 @@ export default {
             const randomPlayer = await csPlayerModel.findOne().skip(random);
             return randomPlayer;
         },
+        getAllPlayerNames: async () => {
+            const players = await csPlayerModel.find({}, 'name');
+            return players.map(player => player.name);
+        },
     },
     Mutation: {
         createCsPlayer: async (_parent: undefined, args: {input: Omit<csPlayer, 'id'>}) => {

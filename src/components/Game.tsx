@@ -3,6 +3,7 @@ import {csPlayer} from '../types/DBTypes';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faArrowUp, faArrowDown} from '@fortawesome/free-solid-svg-icons';
 import {useMutation, useQuery, gql} from '@apollo/client';
+import Select from 'react-select';
 import '../styles/Game.css';
 
 const GET_ID = gql` 
@@ -62,6 +63,12 @@ const GET_CS_PLAYER = gql`
   }
 `;
 
+const GET_ALL_PLAYER_NAMES = gql`
+  query GetAllPlayerNames {
+    getAllPlayerNames
+  }
+`;
+
 function Game() {
   const {loading: playerLoading, error: playerError, data: randomPlayer } = useQuery(GET_RANDOM_PLAYER);
   const [guess, setGuess] = useState('');
@@ -90,6 +97,10 @@ function Game() {
     variables: { name: randomPlayer?.getRandomPlayer.name },
   });
 
+  const {data: playerNamesData, loading: playerNamesLoading, error: playerNamesError } = useQuery(GET_ALL_PLAYER_NAMES);
+
+  const options = playerNamesData?.getAllPlayerNames.map((name: string) => ({ value: name, label: name }));
+
   if (playerLoading) {
     return <div>Loading...</div>;
   }
@@ -106,10 +117,6 @@ function Game() {
     age: playerOfTheDayData?.getCsPlayerByName.age,
     role: playerOfTheDayData?.getCsPlayerByName.role,
     total_winnings: playerOfTheDayData?.getCsPlayerByName.total_winnings,
-  };
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setGuess(event.target.value);
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -157,14 +164,35 @@ function Game() {
       <p className="game-description">Welcome to the GAME.</p>
 
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={guess}
-          onChange={handleChange}
-          className="guess-input"
-          placeholder="Enter your guess"
-          disabled={showAnswer}
-        />
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <Select
+            value={options?.find((option: { value: string; label: string }) => option.value === guess)}
+            onChange={(option: { value: string; label: string } | null) => setGuess(option?.value || '')}
+            options={options}
+            isSearchable
+            placeholder="Enter your guess"
+            styles={{
+              control: (provided) => ({
+                ...provided,
+                width: 200,
+                margin: '0 auto',
+                marginBottom: 10,
+                border: '2px solid #ccc',
+                borderRadius: '5px',
+                fontSize: 16,
+              }),
+              option: (provided, state) => ({
+                ...provided,
+                backgroundColor: state.isSelected ? 'lightgray' : 'white',
+              }),
+              menu: (provided) => ({
+                ...provided,
+                width: 200,
+                margin: '0 auto',
+              }),
+            }}
+          />
+        </div>
         <input
           type="submit"
           value="Guess"

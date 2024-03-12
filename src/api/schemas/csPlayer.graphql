@@ -14,6 +14,7 @@ type Query {
     getCsPlayerById(id: ID!): CsPlayer
     getCsPlayerByName(name: String!): CsPlayer
     getRandomPlayer: CsPlayer
+    getAllPlayerNames: [String]
 }
 
 input CsPlayerInput {

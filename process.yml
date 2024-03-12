@@ -1,6 +1,0 @@
-# For azure launch commands. server.js/ts has static serving and graphql server.
-apps:
-  - script: /home/site/wwwroot/dist/server.js
-    name: 'server'
-    exec_mode: 'fork'
-    instances: 1

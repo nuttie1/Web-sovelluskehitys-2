@@ -31,4 +31,6 @@ type csPlayer = Partial<Document> & {
     total_winnings: number;
 };
 
-export type { User, csPlayer, UserOutput, RegisterInput, TokenContent, LoginUser, UserTest};
+type csPlayerTest = Partial<csPlayer>;
+
+export type { User, csPlayer, UserOutput, RegisterInput, TokenContent, LoginUser, UserTest, csPlayerTest};

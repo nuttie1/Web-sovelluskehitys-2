@@ -25,7 +25,7 @@ client.use(
     })
 );
 
-client.use(express.static('build'));
+client.use(express.static('./build'));
 
 (async () => {
     try {

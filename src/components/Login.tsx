@@ -1,6 +1,6 @@
 import {useMutation, gql} from '@apollo/client';
 import React, { useState,Dispatch, SetStateAction } from 'react';
-import {useNavigate} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 
 import '../styles/Login.css';
 
@@ -76,7 +76,7 @@ const Login: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
         </label>
         <input type="submit" value="Submit" className="login-button" />
       </form>
-      <a href="/register" className="signup-link">No account yet? Sign up</a>
+      <Link to="/register" className="signup-link">No account yet? Sign up</Link>
     </div>
   );
 };

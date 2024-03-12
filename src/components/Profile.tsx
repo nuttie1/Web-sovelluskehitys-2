@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { gql, useQuery, useMutation, ApolloError } from '@apollo/client';
 import { checkUsername, checkPassword } from '../functions/checkData';
+import { useNavigate } from 'react-router-dom';
+
 
 
 import '../styles/Profile.css';
@@ -121,9 +123,12 @@ const Profile: React.FC = () => {
       }
     }
   }
-  const handleLogout = () => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const navigate = useNavigate();
+
+  const HandleLogout = () => {
     localStorage.removeItem('token');
-    window.location.reload();
+    navigate('/login');
   };
 
   return (
@@ -131,7 +136,7 @@ const Profile: React.FC = () => {
       <h1 className="profile-title">{userData.userById.user_name}</h1>
       <p className="profile-points">Your points: {userData.userById.points}</p>
       <button onClick={() => setShowModal(true)} className="update-button">Edit</button>
-      <button onClick={handleLogout} className="update-button">Logout</button>
+      <button onClick={HandleLogout} className="update-button">Logout</button>
       {showModal && (
         <div className="modal-background">
         <div className="modal">

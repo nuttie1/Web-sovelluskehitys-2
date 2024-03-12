@@ -25,6 +25,8 @@ client.use(
     })
 );
 
+client.use(express.static('build'));
+
 (async () => {
     try {
         const schema = applyMiddleware(

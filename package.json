@@ -47,7 +47,7 @@
   },
   "scripts": {
     "help-prod": "echo build and start",
-    "build": "tsc && copyfiles -u 1 src/**/*.graphql dist && CI=false && react-scripts build",
+    "build": "tsc && copyfiles -u 1 src/api/schemas/*.graphql dist && CI=false && react-scripts build",
     "start": "node dist/server.js",
 
     "test": "react-scripts test",

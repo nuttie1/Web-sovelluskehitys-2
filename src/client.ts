@@ -14,6 +14,7 @@ import {
     ApolloServerPluginLandingPageProductionDefault,
   } from '@apollo/server/plugin/landingPage/default';
 import { notFound, errorHandler } from './middlewares';
+import path from 'path';
 require('dotenv').config();
 
 const client = express();
@@ -26,6 +27,10 @@ client.use(
 );
 
 client.use(express.static('./build'));
+
+client.get('/*', function (req, res) {
+    res.sendFile(path.join(__dirname, '../build', 'index.html'));
+  });
 
 (async () => {
     try {

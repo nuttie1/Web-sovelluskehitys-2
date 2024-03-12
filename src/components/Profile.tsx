@@ -45,12 +45,14 @@ const VERIFY_PASSWORD = gql`
 
 const Profile: React.FC = () => {
   const { loading, error, data } = useQuery(GET_ID);
-
   const id = data?.checkToken?.user?.id;
   const { data: userData, loading: userLoading, error: userError, refetch } = useQuery(GET_USER, {
     variables: { id },
     skip: !id || id === null,
   });
+
+  const navigate = useNavigate();
+
 
   const [updateUser] = useMutation(UPDATE_USER);
   const [verifyPassword] = useMutation(VERIFY_PASSWORD);
@@ -123,8 +125,7 @@ const Profile: React.FC = () => {
       }
     }
   }
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const navigate = useNavigate();
+  
 
   const HandleLogout = () => {
     localStorage.removeItem('token');

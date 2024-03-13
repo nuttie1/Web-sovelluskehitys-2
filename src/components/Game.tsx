@@ -79,7 +79,11 @@ function Game() {
   const [addPoints] = useMutation(ADD_POINTS_MUTATION);
   const {loading, error, data} = useQuery(GET_ID);
   const [showModal, setShowModal] = useState(false);
+  const [isUpdatingPoints, setIsUpdatingPoints] = useState(false);
+  const [pointsChange, setPointsChange] = useState(0);
+  const [guessAmount, setGuessAmount] = useState(0);
 
+  // User data
   const id = data?.checkToken?.user?.id;
   const { data: userData, loading: userLoading, error: userError, refetch } = useQuery(GET_USER, {
     variables: { id },
@@ -92,31 +96,32 @@ function Game() {
     skip: !guess,
   });
 
-  // Player of the day
-  const {data: playerOfTheDayData} = useQuery(GET_CS_PLAYER, {
+  // Player
+  const {data: playerData} = useQuery(GET_CS_PLAYER, {
     variables: { name: randomPlayer?.getRandomPlayer.name },
   });
 
+  // Player names
   const {data: playerNamesData, loading: playerNamesLoading, error: playerNamesError } = useQuery(GET_ALL_PLAYER_NAMES);
-
   const options = playerNamesData?.getAllPlayerNames.map((name: string) => ({ value: name, label: name }));
 
   if (playerLoading) {
     return <div>Loading...</div>;
   }
   
-  if (!playerOfTheDayData?.getCsPlayerByName) {
+  if (!playerData?.getCsPlayerByName) {
     return <div>Error: Player not found</div>;
   }
 
-  const playerOfTheDay: csPlayer = {
-    id: playerOfTheDayData?.getCsPlayerByName.id,
-    name: playerOfTheDayData?.getCsPlayerByName.name,
-    country: playerOfTheDayData?.getCsPlayerByName.country,
-    team: playerOfTheDayData?.getCsPlayerByName.team,
-    age: playerOfTheDayData?.getCsPlayerByName.age,
-    role: playerOfTheDayData?.getCsPlayerByName.role,
-    total_winnings: playerOfTheDayData?.getCsPlayerByName.total_winnings,
+  // Set player data
+  const player: csPlayer = {
+    id: playerData?.getCsPlayerByName.id,
+    name: playerData?.getCsPlayerByName.name,
+    country: playerData?.getCsPlayerByName.country,
+    team: playerData?.getCsPlayerByName.team,
+    age: playerData?.getCsPlayerByName.age,
+    role: playerData?.getCsPlayerByName.role,
+    total_winnings: playerData?.getCsPlayerByName.total_winnings,
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -133,10 +138,13 @@ function Game() {
       total_winnings: guessedPlayerData?.getCsPlayerByName.total_winnings,
     };
 
-    if (guessedPlayer.name === playerOfTheDay.name) {
+    // If the guessed player is correct
+    if (guessedPlayer.name === player.name) {
       setIsCorrectGuess(true);
       await refetch();
-      const newPoints = userData.userById.points + remainingGuesses;
+      setIsUpdatingPoints(true);
+      const newPoints = userData.userById.points + 10 + remainingGuesses;
+      setPointsChange(10 + remainingGuesses - guessAmount);
       await addPoints({
         variables: {
           user: {
@@ -144,13 +152,33 @@ function Game() {
           }
         }
       });
+      await refetch()
+      setIsUpdatingPoints(false);
       setShowAnswer(true);
       setShowModal(true);
-    } else if (remainingGuesses === 1) {
-      setShowAnswer(true);
-      setShowModal(true);
+    // If the guessed player is incorrect
     } else {
-      setRemainingGuesses(prev => prev - 1);
+      setIsUpdatingPoints(true);
+      setGuessAmount(prev => prev + 1);
+      const newPoints = userData.userById.points - 1;
+      setPointsChange(prev => prev - 1);
+      await addPoints({
+        variables: {
+          user: {
+            points: newPoints
+          }
+        }
+      });
+      await refetch();
+      setIsUpdatingPoints(false);
+
+      // Check if the user has any remaining guesses
+      if (remainingGuesses === 1) {
+        setShowAnswer(true);
+        setShowModal(true);
+      } else {
+        setRemainingGuesses(prev => prev - 1);
+      }
     }
 
     setGuesses([...guesses, guessedPlayer]);
@@ -169,6 +197,7 @@ function Game() {
             value={options?.find((option: { value: string; label: string }) => option.value === guess)}
             onChange={(option: { value: string; label: string } | null) => setGuess(option?.value || '')}
             options={options}
+            isDisabled={isUpdatingPoints}
             isSearchable
             placeholder="Enter your guess"
             styles={{
@@ -217,17 +246,17 @@ function Game() {
           </tr>
         </thead>
         <tbody>
-          {guesses.map((player, index) => (
+          {guesses.map((guessedPlayer, index) => (
             <tr key={index}>
-              <td className={player.name === playerOfTheDay.name ? 'correct-guess' : 'incorrect-guess'}>{player.name}</td>
-              <td className={player.country === playerOfTheDay.country ? 'correct-guess' : 'incorrect-guess'}>{player.country}</td>
-              <td className={player.team === playerOfTheDay.team ? 'correct-guess' : 'incorrect-guess'}>{player.team}</td>
-              <td className={player.age === playerOfTheDay.age ? 'correct-guess' : 'incorrect-guess'}>
-                {player.age} {player.age === playerOfTheDay.age ? '' : player.age > playerOfTheDay.age ? <FontAwesomeIcon icon={faArrowDown} /> : <FontAwesomeIcon icon={faArrowUp} />}
+              <td className={guessedPlayer.name === player.name ? 'correct-guess' : 'incorrect-guess'}>{guessedPlayer.name}</td>
+              <td className={guessedPlayer.country === player.country ? 'correct-guess' : 'incorrect-guess'}>{guessedPlayer.country}</td>
+              <td className={guessedPlayer.team === player.team ? 'correct-guess' : 'incorrect-guess'}>{guessedPlayer.team}</td>
+              <td className={guessedPlayer.age === player.age ? 'correct-guess' : 'incorrect-guess'}>
+                {guessedPlayer.age} {guessedPlayer.age === player.age ? '' : guessedPlayer.age > player.age ? <FontAwesomeIcon icon={faArrowDown} /> : <FontAwesomeIcon icon={faArrowUp} />}
               </td>
-              <td className={player.role === playerOfTheDay.role ? 'correct-guess' : 'incorrect-guess'}>{player.role}</td>
-              <td className={player.total_winnings === playerOfTheDay.total_winnings ? 'correct-guess' : 'incorrect-guess'}>
-                {player.total_winnings} $ {player.total_winnings === playerOfTheDay.total_winnings ? '' : player.total_winnings > playerOfTheDay.total_winnings ? <FontAwesomeIcon icon={faArrowDown} /> : <FontAwesomeIcon icon={faArrowUp} />}
+              <td className={guessedPlayer.role === player.role ? 'correct-guess' : 'incorrect-guess'}>{guessedPlayer.role}</td>
+              <td className={guessedPlayer.total_winnings === player.total_winnings ? 'correct-guess' : 'incorrect-guess'}>
+                {guessedPlayer.total_winnings} $ {guessedPlayer.total_winnings === player.total_winnings ? '' : guessedPlayer.total_winnings > player.total_winnings ? <FontAwesomeIcon icon={faArrowDown} /> : <FontAwesomeIcon icon={faArrowUp} />}
               </td>
             </tr>
           ))}
@@ -239,12 +268,12 @@ function Game() {
           <table>
             <tbody>
               <tr>
-                <td className='correct-guess'>{playerOfTheDay.name}</td>
-                <td className='correct-guess'>{playerOfTheDay.country}</td>
-                <td className='correct-guess'>{playerOfTheDay.team}</td>
-                <td className='correct-guess'>{playerOfTheDay.age}</td>
-                <td className='correct-guess'>{playerOfTheDay.role}</td>
-                <td className='correct-guess'>{playerOfTheDay.total_winnings} $</td>
+                <td className='correct-guess'>{player.name}</td>
+                <td className='correct-guess'>{player.country}</td>
+                <td className='correct-guess'>{player.team}</td>
+                <td className='correct-guess'>{player.age}</td>
+                <td className='correct-guess'>{player.role}</td>
+                <td className='correct-guess'>{player.total_winnings} $</td>
               </tr>
             </tbody>
           </table>
@@ -254,16 +283,17 @@ function Game() {
         <div className="modal-background">
         <div className="modal">
           <button onClick={() => setShowModal(false)} className="close-button">Close</button>
-          <h2 className="modal-title">Game over</h2>
           {isCorrectGuess ? (
             <div>
-              <p className="modal-text">Congratulations, you guessed correctly! The player was: {playerOfTheDay.name}</p>
-              <p className="modal-text">You got {remainingGuesses} points!</p>
+              <h2 className="modal-title">You WON!</h2>
+              <p className="modal-text">Congratulations, you guessed correctly! The player was: {player.name}</p>
+              <p className="modal-text">You got {pointsChange} points!</p>
             </div>
           ) : (
             <div>
-              <p className="modal-text">Sorry, no more guesses left. The correct player was: {playerOfTheDay.name}</p>
-              <p className="modal-text">You got 0 points</p>
+              <h2 className="modal-title">You Lost</h2>
+              <p className="modal-text">Sorry, no more guesses left. The correct player was: {player.name}</p>
+              <p className="modal-text">You lost {Math.abs(pointsChange)} points</p>
             </div>
           )}
         </div>

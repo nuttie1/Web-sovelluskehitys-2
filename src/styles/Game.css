@@ -1,12 +1,19 @@
 .game-container {
     text-align: center;
     margin-top: 50px;
-  }
+}
+
+.game-header {
+    position: relative;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+}
   
-.game-title {
+  .game-title {
     font-size: 36px;
     color: #333;
-}
+  }
 
 .game-description {
     font-size: 18px;
@@ -111,4 +118,25 @@ table tbody tr:hover {
     padding: 20px;
     border: 1px solid black;
     border-radius: 10px;
+}
+
+.info-modal {
+    text-align: left;
+    bottom: 200px;
+    position: relative;
+    background-color: white;
+    padding: 20px;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+.info-button {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 2em;
+    cursor: pointer;
 }

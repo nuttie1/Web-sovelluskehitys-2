@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {csPlayer} from '../types/DBTypes';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faArrowUp, faArrowDown} from '@fortawesome/free-solid-svg-icons';
+import {faArrowUp, faArrowDown, faCircleInfo} from '@fortawesome/free-solid-svg-icons';
 import {useMutation, useQuery, gql} from '@apollo/client';
 import Select from 'react-select';
 import '../styles/Game.css';
@@ -82,6 +82,7 @@ function Game() {
   const [isUpdatingPoints, setIsUpdatingPoints] = useState(false);
   const [pointsChange, setPointsChange] = useState(0);
   const [guessAmount, setGuessAmount] = useState(0);
+  const [showInfoModal, setShowInfoModal] = useState(false);
 
   // User data
   const id = data?.checkToken?.user?.id;
@@ -188,9 +189,13 @@ function Game() {
 
   return (
     <div className="game-container">
-      <h1 className="game-title">GAME</h1>
+      <div className="game-header">
+        <h1 className="game-title">GAME</h1>
+        <button onClick={() => setShowInfoModal(true)} className="info-button">
+          <FontAwesomeIcon icon={faCircleInfo} />
+        </button>
+      </div>
       <p className="game-description">Welcome to the GAME.</p>
-
       <form onSubmit={handleSubmit}>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <Select
@@ -297,6 +302,24 @@ function Game() {
             </div>
           )}
         </div>
+        </div>
+      )}
+      {showInfoModal && (
+        <div className="modal-background">
+        <div className="info-modal">
+          <button onClick={() => setShowInfoModal(false)} className="close-button">Close</button>
+            <div>
+              <h2>How Points Work</h2>
+              <p>In this game, your points are calculated based on your guesses. Here's how it works:</p>
+              <ul>
+                <li>Each round starts with 10 points.</li>
+                <li>For every correct guess, you keep these points and also gain additional points equal to the number of remaining guesses.</li>
+                <li>For every incorrect guess, one point is subtracted from your total points.</li>
+                <li>The net points gained in a round is the sum of the points you started with and the points gained from correct guesses, minus the points lost from incorrect guesses.</li>
+              </ul>
+              <p>So, the more correct guesses you make and the fewer incorrect guesses you make, the more points you'll gain!</p>
+            </div>
+          </div>
         </div>
       )}
     </div>

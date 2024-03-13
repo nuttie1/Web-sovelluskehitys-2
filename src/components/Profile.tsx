@@ -103,7 +103,7 @@ const Profile: React.FC = () => {
         setErrorTextNewPassword(checkPassword(newPassword).message);
         return;
       }
-      const { data: verifyData } = await verifyPassword({variables: {username: data.checkToken.user.user_name, password: oldPassword}});
+      const { data: verifyData } = await verifyPassword({variables: {username: userData.userById.user_name, password: oldPassword}});
 
       if (!verifyData.verifyPassword) {
         setErrorTextOldPassword("Password doesn't match!");

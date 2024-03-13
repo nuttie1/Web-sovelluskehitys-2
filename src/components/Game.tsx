@@ -6,6 +6,10 @@ import {useMutation, useQuery, gql} from '@apollo/client';
 import Select from 'react-select';
 import '../styles/Game.css';
 
+/**
+ * GraphQL query to check users token and get their ID
+ * @returns User Object with their ID
+ */
 const GET_ID = gql` 
   query CheckToken {
     checkToken {
@@ -16,6 +20,11 @@ const GET_ID = gql`
   }
 `;
 
+/**
+ * GraphQL query to get a user by their ID
+ * @param id: The ID of the user
+ * @returns The user's username and points with the given ID
+ */
 const GET_USER = gql` 
   query GetUserById($id: ID!) {
     userById(id: $id) { 
@@ -25,6 +34,11 @@ const GET_USER = gql`
   }
 `
 
+/**
+ * GraphQL mutation to update a user's points
+ * @param user: The user's new points
+ * @returns User object with new points
+ */
 const ADD_POINTS_MUTATION = gql`
   mutation UpdateUser($user: UpdateUserInput!) {
     updateUser(user: $user) {
@@ -35,6 +49,10 @@ const ADD_POINTS_MUTATION = gql`
   }
 `;
 
+/**
+ * GraphQL query to get a random CS2 player
+ * @returns A random CS2 player
+ */
 const GET_RANDOM_PLAYER = gql`
   query GetRandomPlayer {
     getRandomPlayer {
@@ -49,6 +67,11 @@ const GET_RANDOM_PLAYER = gql`
   }
 `;
 
+/**
+ * GraphQL query to get a CS2 player by their name
+ * @param name: The name of the CS2 player
+ * @returns The CS2 player's data with the given name
+ */
 const GET_CS_PLAYER = gql`
   query GetCsPlayerByName($name: String!) {
     getCsPlayerByName(name: $name) {
@@ -63,12 +86,21 @@ const GET_CS_PLAYER = gql`
   }
 `;
 
+/**
+ * GraphQL query to get all the names of the CS2 players
+ * @returns All the names of the CS2 players
+ */
 const GET_ALL_PLAYER_NAMES = gql`
   query GetAllPlayerNames {
     getAllPlayerNames
   }
 `;
 
+/**
+ * Game component, contains the game logic and UI
+ * @function Game
+ * @returns The Game component
+ */
 function Game() {
   const {loading: playerLoading, error: playerError, data: randomPlayer } = useQuery(GET_RANDOM_PLAYER);
   const [guess, setGuess] = useState('');

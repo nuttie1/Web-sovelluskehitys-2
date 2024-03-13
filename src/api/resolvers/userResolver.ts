@@ -4,6 +4,18 @@ import { UserResponse, LoginResponse } from "../../types/MessageTypes";
 import { MyContext } from "../../types/MyContext";
 import { isLoggedIn } from "../../functions/authorize";
 
+/**
+ * This is the resolver for the user
+ * @param users: Get all the users
+ * @param userById: Get a user by their ID
+ * @param register: Register a user (Creates the user)
+ * @param login: Login a user
+ * @param updateUser: Update a user
+ * @param deleteUser: Delete a user
+ * @param verifyPassword: Verify the password of a user
+ * @returns The resolver for the user
+ */
+
 export default {
     Query: {
         users: async () => {

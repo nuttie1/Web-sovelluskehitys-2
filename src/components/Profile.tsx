@@ -3,10 +3,12 @@ import { gql, useQuery, useMutation, ApolloError } from '@apollo/client';
 import { checkUsername, checkPassword } from '../functions/checkData';
 import { useNavigate } from 'react-router-dom';
 
-
-
 import '../styles/Profile.css';
 
+/**
+ * GraphQL query to check users token and get their ID
+ * @returns User Object with their ID
+ */
 const GET_ID = gql` 
   query CheckToken {
     checkToken {
@@ -17,6 +19,11 @@ const GET_ID = gql`
   }
 `;
 
+/**
+ * GraphQL query to get a user by their ID
+ * @param id: The ID of the user
+ * @returns The user's username and points with the given ID
+ */
 const GET_USER = gql` 
   query GetUserById($id: ID!) {
     userById(id: $id) { 
@@ -26,6 +33,11 @@ const GET_USER = gql`
   }
 `
 
+/**
+ * GraphQL mutation to update a user
+ * @param user: The user's updated data
+ * @returns User object with their updated data
+ */
 const UPDATE_USER = gql`
   mutation UpdateUser($user: UpdateUserInput!) {
     updateUser(user: $user) {
@@ -37,14 +49,25 @@ const UPDATE_USER = gql`
   }
 `;
 
+/**
+ * GraphQL mutation to verify a user's password
+ * @param username: The user's username
+ * @param password: The user's password
+ * @returns True if the password is correct
+ */
 const VERIFY_PASSWORD = gql`
   mutation VerifyPassword($username: String!, $password: String!) {
     verifyPassword(user_name: $username, password: $password)
   }
 `;
 
+/**
+ * Profile component to display the user's profile
+ * @function Profile
+ * @returns The Profile component
+ */
 const Profile: React.FC = () => {
-  const { loading, error, data } = useQuery(GET_ID);
+  const { data } = useQuery(GET_ID);
   const id = data?.checkToken?.user?.id;
   const { data: userData, loading: userLoading, error: userError, refetch } = useQuery(GET_USER, {
     variables: { id },
@@ -58,7 +81,6 @@ const Profile: React.FC = () => {
   }, [id, refetch]);
 
   const navigate = useNavigate();
-
 
   const [updateUser] = useMutation(UPDATE_USER);
   const [verifyPassword] = useMutation(VERIFY_PASSWORD);
@@ -131,7 +153,6 @@ const Profile: React.FC = () => {
     }
   }
   
-
   const HandleLogout = () => {
     localStorage.removeItem('token');
     navigate('/login');

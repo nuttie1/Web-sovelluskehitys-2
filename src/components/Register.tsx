@@ -4,7 +4,12 @@ import { checkUsername, checkPassword } from '../functions/checkData';
 
 import '../styles/Register.css';
 
-const REGISTER_MUAATION = gql`  
+/**
+ * GraphQL mutation to register a user
+ * @constant REGISTER_MUTATION
+ * @returns The user object with their ID and username
+ */
+const REGISTER_MUTATION = gql`  
   mutation Register($username: String!, $password: String!) {
     register(user: {user_name: $username, password: $password}) {
       user {
@@ -15,17 +20,27 @@ const REGISTER_MUAATION = gql`
   }
 `;
 
+/**
+ * Interface for the IsUserLoggedIn function
+ * @interface IsUserLoggedIn
+ * @param setIsLoggedIn The function to set the user's logged in status to true 
+ * @returns The IsUserLoggedIn interface
+ */
 interface IsUserLoggedIn {
   setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
 }
 
+/**
+ * Register component to allow users to register 
+ * @returns The Register component
+ */
 const RegisterPage: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorTextUsername, setErrorTextUsername] = useState('');
   const [errotTextPassword, setErrorTextPassword] = useState('');
 
-  const [register, { data, loading, error }] = useMutation(REGISTER_MUAATION);
+  const [register, { data, loading, error }] = useMutation(REGISTER_MUTATION);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -35,7 +50,6 @@ const RegisterPage: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
         setErrorTextPassword(checkPassword(password).message);
         return;
       }
-    
       await register({variables: { username, password } });
       if (data) {
         console.log('Registered:', data);

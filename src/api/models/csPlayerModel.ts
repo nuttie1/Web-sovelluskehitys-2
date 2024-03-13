@@ -2,6 +2,17 @@ import mongoose from "mongoose";
 import { csPlayer } from "../../types/DBTypes";
 import exp from "constants";
 
+/**
+ * This is the model for the CS2 player
+ * @param name: The name of the player
+ * @param team: The team the player is on
+ * @param country: The country the player is from
+ * @param age: The age of the player
+ * @param role: The role of the player
+ * @param total_winnings: The total winnings of the player
+ * @returns The model for the CS2 player
+ */
+
 const csPlayerModel = new mongoose.Schema<csPlayer>({
     name: {
         type: String,

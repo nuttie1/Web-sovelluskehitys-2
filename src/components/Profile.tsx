@@ -51,6 +51,12 @@ const Profile: React.FC = () => {
     skip: !id || id === null,
   });
 
+  useEffect(() => {
+    if (id) {
+      refetch();
+    }
+  }, [id, refetch]);
+
   const navigate = useNavigate();
 
 
@@ -70,7 +76,6 @@ const Profile: React.FC = () => {
   if (userError) return <p>Error: {userError.message}</p>;
 
   if (!userData || !userData.userById) return <p>No user data</p>;
-
 
   const handleUsernameUpdate = async (event: React.FormEvent) => {
     event.preventDefault();

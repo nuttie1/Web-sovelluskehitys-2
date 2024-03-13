@@ -28,9 +28,7 @@ client.use(
 
 client.use(express.static('./build'));
 
-client.get('/*', function (req, res) {
-    res.sendFile(path.join(__dirname, '../build', 'index.html'));
-  });
+
 
 (async () => {
     try {
@@ -61,6 +59,10 @@ client.get('/*', function (req, res) {
                 context: async ({req}) => authenticate(req),
               }),
         );
+
+        client.get('/*', function (req, res) {
+            res.sendFile(path.join(__dirname, '../build', 'index.html'));
+        });
 
         client.use(notFound);
         client.use(errorHandler);

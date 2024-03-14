@@ -110,6 +110,7 @@ const Profile: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
 
   const [showModalUpdate, setShowModalUpdate] = useState(false);
   const [showModalDelete, setShowModalDelete] = useState(false);
+  const [showModalReset, setShowModalReset] = useState(false);
   const [newUsername, setNewUsername] = useState('');
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -176,6 +177,14 @@ const Profile: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
       }
     }
   }
+  const HandleResetPoints = async () => {
+    try {
+      await updateUser({variables: { user: {points: 0} } });
+      refetch();
+    } catch (error) {
+      console.error('Error updating user:', error);
+    }
+  }
   
   const HandleLogout = () => {
     localStorage.removeItem('token');
@@ -199,7 +208,9 @@ const Profile: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
       <p className="profile-points">Your points: {userData.userById.points}</p>
       <button onClick={() => setShowModalUpdate(true)} className="update-button">Edit</button>
       <button onClick={HandleLogout} className="update-button">Logout</button>
-      <button onClick={() => setShowModalDelete(true)} className="update-button">Delete</button>
+      <br />
+      <button onClick={() => setShowModalDelete(true)} className="update-red-button">Delete</button>
+      <button onClick={() => setShowModalReset(true)} className="update-red-button">Reset Points</button>
       {showModalUpdate && (
         <div className="modal-background">
         <div className="modal">
@@ -247,6 +258,15 @@ const Profile: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
         <button onClick={() => setShowModalDelete(false)} className="close-button">Close</button>
           <h2 className="profile-title-form-delete">Are you sure?</h2>
           <button onClick={HandleUserDelete} className="update-button">Yes</button>
+        </div>
+        </div>
+      )}
+      {showModalReset && (
+        <div className="modal-background">
+          <div className="modal">
+            <button onClick={() => setShowModalReset(false)} className="close-button">Close</button>
+            <h2 className="profile-title-form-delete">Are you sure?</h2>
+            <button onClick={HandleResetPoints} className="update-button">Yes</button>
         </div>
         </div>
       )}

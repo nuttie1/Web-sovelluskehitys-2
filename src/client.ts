@@ -54,7 +54,7 @@ client.use(express.static('./build'));
 
         const server = new ApolloServer<MyContext>({
             schema,
-            introspection: true, // Disable this in production, used to query the schema
+            introspection: process.env.NODE_ENV !== 'production',
             plugins: [
                 process.env.NODE_ENV === 'production'
                     ? ApolloServerPluginLandingPageProductionDefault({ footer: false })

@@ -16,7 +16,8 @@ import exp from "constants";
 const csPlayerModel = new mongoose.Schema<csPlayer>({
     name: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     team: {
         type: String,

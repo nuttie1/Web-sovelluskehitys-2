@@ -56,7 +56,9 @@ const Leaderboard: React.FC = () => {
 
   if (!data || !data.users) return <p>No leaderboard data available.</p>;
 
-  const sortedScores = [...data.users].sort((a, b) => b.points - a.points);
+  const sortedScores = [...data.users]
+    .filter((userScore) => userScore.points > 0) // Remove users with 0 points
+    .sort((a, b) => b.points - a.points);
 
   return (
     <div className="leaderboard-container">

@@ -1,6 +1,7 @@
 import {useMutation, gql} from '@apollo/client';
 import React, { useState,Dispatch, SetStateAction } from 'react';
 import { checkUsername, checkPassword } from '../functions/checkData';
+import {useNavigate} from 'react-router-dom';
 
 import '../styles/Register.css';
 
@@ -12,6 +13,23 @@ import '../styles/Register.css';
 const REGISTER_MUTATION = gql`  
   mutation Register($username: String!, $password: String!) {
     register(user: {user_name: $username, password: $password}) {
+      user {
+        id
+        user_name
+      }
+    }
+  }
+`;
+
+/**
+ * GraphQL mutation to login a user
+ * @constant LOGIN_MUTATION
+ * @returns The users token and user object with id and username
+ */
+const LOGIN_MUTATION = gql`
+  mutation Login($username: String!, $password: String!) {
+    login(loginInput: {user_name: $username, password: $password}) {
+      token
       user {
         id
         user_name
@@ -42,6 +60,10 @@ const RegisterPage: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
 
   const [register, { data, loading, error }] = useMutation(REGISTER_MUTATION);
 
+  const [login] = useMutation(LOGIN_MUTATION);
+
+  const navigate = useNavigate();
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
@@ -51,10 +73,12 @@ const RegisterPage: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
         return;
       }
       await register({variables: { username, password } });
-      if (data) {
+      const { data } = await login({variables: { username, password } });
+      if (data?.login?.token) {
         console.log('Registered:', data);
-        localStorage.setItem('token', data.register.token);
+        localStorage.setItem('token', data.login.token);
         setIsLoggedIn(true);
+        navigate('/');
       }
       setErrorTextUsername("");
       setErrorTextPassword("");

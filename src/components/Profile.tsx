@@ -61,6 +61,12 @@ const VERIFY_PASSWORD = gql`
   }
 `;
 
+/**
+ * Interface for the IsUserLoggedIn function
+ * @interface IsUserLoggedIn
+ * @param setIsLoggedIn The function to set the user's logged in status to true 
+ * @returns The IsUserLoggedIn interface
+ */
 interface IsUserLoggedIn {
   setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
 }

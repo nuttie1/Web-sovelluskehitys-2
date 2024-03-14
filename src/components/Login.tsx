@@ -53,7 +53,6 @@ const Login: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
       setErrorText("Username/Password is empty!");
       return;
     }
-
     try {
       const { data } = await login({variables: { username, password } });
 

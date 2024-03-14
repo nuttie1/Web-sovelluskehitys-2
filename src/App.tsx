@@ -109,7 +109,7 @@ function App() {
 
       <ApolloProvider client={client}>
         <Routes >
-        <Route path="/" element={<Game isLoggedIn={isLoggedIn}/>} />
+          <Route path="/" element={<Game isLoggedIn={isLoggedIn}/>} />
           <Route path="/Leaderboard" element={<Leaderboard />} />
           <Route path="/Login" element={<Login setIsLoggedIn={setIsLoggedIn}/>} />
           <Route path="/Register" element={<Register setIsLoggedIn={setIsLoggedIn}/>} />

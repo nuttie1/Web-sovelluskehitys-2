@@ -196,7 +196,8 @@ function Game({ isLoggedIn }: { isLoggedIn: boolean}) {
       if (isLoggedIn) { // Check if the user is logged in, if so, update their points
         setIsUpdatingPoints(true);
         setGuessAmount(prev => prev + 1);
-        const newPoints = userData.userById.points - 1;
+        let newPoints = userData.userById.points - 1;
+        newPoints = newPoints < 0 ? 0 : newPoints; // Ensure newPoints is not less than 0
         setPointsChange(prev => prev - 1);
         await addPoints({
           variables: {

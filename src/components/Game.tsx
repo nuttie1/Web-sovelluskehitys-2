@@ -227,12 +227,12 @@ function Game({ isLoggedIn }: { isLoggedIn: boolean}) {
   return (
     <div className="game-container">
       <div className="game-header">
-        <h1 className="game-title">GAME</h1>
+        <h1 className="game-title">CS-GG</h1>
         <button onClick={() => setShowInfoModal(true)} className="info-button">
           <FontAwesomeIcon icon={faCircleInfo} />
         </button>
       </div>
-      <p className="game-description">Welcome to the GAME.</p>
+      <p className="game-description">Counter-Strike Pro Player Guessing Game</p>
       <form onSubmit={handleSubmit}>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <Select

@@ -50,7 +50,7 @@ const client = new ApolloClient({
  * @param navigate: The navigate function for the router
  * @returns The profile component if the user is authenticated
  */
-const ProfileWrapper = () => {
+const ProfileWrapper = ({ setIsLoggedIn }: { setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>> }) => {
   const isAuthenticated = !!localStorage.getItem('token');
   const navigate = useNavigate();
 
@@ -60,7 +60,7 @@ const ProfileWrapper = () => {
     }
   }, [isAuthenticated, navigate]);
 
-  return isAuthenticated ? <Profile /> : null;
+  return isAuthenticated ? <Profile setIsLoggedIn={setIsLoggedIn}/> : null;
 };
 
 /**
@@ -113,7 +113,7 @@ function App() {
           <Route path="/Leaderboard" element={<Leaderboard />} />
           <Route path="/Login" element={<Login setIsLoggedIn={setIsLoggedIn}/>} />
           <Route path="/Register" element={<Register setIsLoggedIn={setIsLoggedIn}/>} />
-          <Route path="/Profile" element={<ProfileWrapper />} />
+          <Route path="/Profile" element={<ProfileWrapper setIsLoggedIn={setIsLoggedIn}/>} />
         </Routes>
       </ApolloProvider>
       </div>

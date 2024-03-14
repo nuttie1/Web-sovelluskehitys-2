@@ -1,44 +1,73 @@
+"""
+Type that describes the user object
+
+"""
 type User {
     id: ID!
     user_name: String!
     points: Int!
 }
 
+"""
+Type that describes the response of the login mutation
+"""
 type LoginResponse {
     user: User!
     token: String!
 }
 
+"""
+Type that describes the response of the user mutation
+"""
 type UserResponse {
     message: String!
     user: User!
 }
 
+"""
+Type that describes the response of the verify password mutation
+"""
 type VerifyPasswordResponse {
     message: String!
 }
 
+"""
+Input type that describes the user input for the register mutation
+"""
 input RegisterInput {
     user_name: String!
     password: String!
 }
 
+"""
+Input type that describes the user input for the login mutation
+"""
 input LoginInput {
     user_name: String!
     password: String!
 }
 
+"""
+Input type that describes the user input for the update user mutation
+"""
 input UpdateUserInput {
     user_name: String
     password: String
     points: Int
 }
 
+"""
+Type that describes the query of the user
+"""
 type Query {
     users: [User]
     userById(id: ID!): User
-    checkToken: UserResponse}
+    checkToken: UserResponse
+}
 
+"""
+Type that describes the mutation of the user
+"""
 type Mutation {
     register( user : RegisterInput! ): UserResponse
     login( loginInput : LoginInput! ): LoginResponse

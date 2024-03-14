@@ -1,3 +1,6 @@
+"""
+Type that describes the cs player object
+"""
 type CsPlayer {
     id: ID!
     name: String!
@@ -8,6 +11,9 @@ type CsPlayer {
     total_winnings: Int!
 }
 
+"""
+Type that describes the query of the cs player object
+"""
 type Query {
     allCsPlayers: [CsPlayer]
     getCsPlayerById(id: ID!): CsPlayer
@@ -16,6 +22,9 @@ type Query {
     getAllPlayerNames: [String]
 }
 
+"""
+Type that describes the input for creating a cs player object
+"""
 input CsPlayerInput {
     name: String!
     team: String!
@@ -25,6 +34,9 @@ input CsPlayerInput {
     total_winnings: Int!
 }
 
+"""
+Type that describes the mutation for cs player object
+"""
 type Mutation {
     createCsPlayer(input: CsPlayerInput!): CsPlayer
     deleteCsPlayer(id: ID!): CsPlayer

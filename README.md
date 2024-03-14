@@ -17,7 +17,7 @@ Before starting here setup the authentication server in a different project. Aut
 
 Follow these steps to set up the project locally:
 1. **Clone the repository**: Use your preferred Git client to clone this repository to your local machine.
-2. **Configure Environment Variables**: Rename the `.env.sample` file to `.env` and add the value for `DB_URL`.
+2. **Configure Environment Variables**: Rename the `.env.sample` file to `.env` and add the value for `DB_URL` (you get that from the developers ;)).
 
 3. **Install Dependencies**: Run the following command in your terminal to install the necessary dependencies:
     ```bash

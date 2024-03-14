@@ -34,7 +34,6 @@ const userResolver = {
     },
     Mutation: {
         register: async (_parent: undefined, args: {user: RegisterInput}) => {
-            console.log(args.user);
             return await fetchData<UserResponse> (
                 `${process.env.AUTH_URL}/users`,
                 {
@@ -45,7 +44,6 @@ const userResolver = {
             );
         },
         login: async (_parent: undefined, args: {loginInput: {user_name: string, password: string}}) => {
-            console.log(args.loginInput);
             return await fetchData<LoginResponse> (
                 `${process.env.AUTH_URL}/auth/login`,
                 {

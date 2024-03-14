@@ -141,7 +141,7 @@ function Game({ isLoggedIn }: { isLoggedIn: boolean}) {
   });
 
   // Player
-  const {data: playerData} = useQuery(GET_CS_PLAYER, {
+  const {loading: csplayerLoading, data: playerData} = useQuery(GET_CS_PLAYER, {
     variables: { name: randomPlayer?.getRandomPlayer.name },
   });
 
@@ -149,7 +149,7 @@ function Game({ isLoggedIn }: { isLoggedIn: boolean}) {
   const {data: playerNamesData } = useQuery(GET_ALL_PLAYER_NAMES);
   const options = playerNamesData?.getAllPlayerNames.map((name: string) => ({ value: name, label: name }));
 
-  if (playerLoading) {
+  if (playerLoading || csplayerLoading) {
     return <div>Loading...</div>;
   }
   

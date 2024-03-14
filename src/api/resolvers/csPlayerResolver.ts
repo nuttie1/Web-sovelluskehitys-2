@@ -1,5 +1,7 @@
 import csPlayerModel from "../models/csPlayerModel"
 import { csPlayer } from "../../types/DBTypes";
+import { isAdmin } from "../../functions/authorize";
+import { MyContext } from "../../types/MyContext";
 
 /**
  * This is the resolver for the CS2 player
@@ -38,10 +40,12 @@ const csPlayerResolver = {
         },
     },
     Mutation: {
-        createCsPlayer: async (_parent: undefined, args: {input: Omit<csPlayer, 'id'>}) => {
+        createCsPlayer: async (_parent: undefined, args: {input: Omit<csPlayer, 'id'>}, context: MyContext) => {
+            isAdmin(context);
             return await csPlayerModel.create(args.input);
         },
-        deleteCsPlayer: async (_parent: undefined, args: {id: string}) => {
+        deleteCsPlayer: async (_parent: undefined, args: {id: string}, context: MyContext) => {
+            isAdmin(context);
             return await csPlayerModel.findByIdAndDelete(args.id);
         },
     },

@@ -8,8 +8,6 @@ import mongoose from 'mongoose';
  * Tests for the user API
  */
 describe('User API', () => {
-    let token: string;
-
     let user: LoginResponse;
 
     const testUser: UserTest = {
@@ -75,7 +73,33 @@ describe('User API', () => {
         expect(userData.user).toHaveProperty("id");
         user = response.body.data.login;
         console.log(user);
-        token = response.body.data.login.token;
+        user.token = response.body.data.login.token;
+    });
+
+    /**
+     * Test for checking the token
+     * It sends a query to the /graphql endpoint
+     */
+    it('should check the token', async () => {
+        const response = await request(client)
+            .post('/graphql')
+            .set('Authorization', `Bearer ${user.token}`)
+            .send({
+                query: `
+                    query {
+                        checkToken {
+                            user {
+                                id
+                                user_name
+                            }
+                        }
+                    }
+                `,
+            });
+        const userData = response.body.data.checkToken;
+        expect(response.body.data.checkToken.user.user_name).toBe(testUser.user_name);
+        expect(userData).toHaveProperty("user");
+        expect(userData.user).toHaveProperty("id");
     });
 
     /**
@@ -85,7 +109,7 @@ describe('User API', () => {
     it('should get all users', async () => {
         const response = await request(client)
             .post('/graphql')
-            .set('Authorization', `Bearer ${token}`)
+            .set('Authorization', `Bearer ${user.token}`)
             .send({
                 query: `
                     query {
@@ -109,7 +133,7 @@ describe('User API', () => {
     it('should get a user by id', async () => {
         const response = await request(client)
             .post('/graphql')
-            .set('Authorization', `Bearer ${token}`)
+            .set('Authorization', `Bearer ${user.token}`)
             .send({
                 query: `
                     query UserById($id: ID!) {
@@ -157,7 +181,7 @@ describe('User API', () => {
     it('should update a user', async () => {
         const response = await request(client)
             .post('/graphql')
-            .set('Authorization', `Bearer ${token}`)
+            .set('Authorization', `Bearer ${user.token}`)
             .send({
                 query: `
                     mutation UpdateUser($user: UpdateUserInput!) {
@@ -187,7 +211,7 @@ describe('User API', () => {
     it('should delete a user', async () => {
         const response = await request(client)
             .post('/graphql')
-            .set('Authorization', `Bearer ${token}`)
+            .set('Authorization', `Bearer ${user.token}`)
             .send({
                 query: `
                     mutation {
@@ -213,13 +237,20 @@ describe('User API', () => {
 describe('csPlayer API', () => {
     beforeAll(async () => {
         await mongoose.connect(process.env.DB_URL as string);
-      });
+    });
     
-      afterAll(async () => {
+    afterAll(async () => {
         await mongoose.connection.close();
-      });
+    });
 
+    
+    let admin: LoginResponse;
     let player: csPlayerTest;
+
+    const testAdmin: UserTest = {
+        user_name: "Admin",
+        password: '1csgg1234',
+    };
 
     const testPlayer: csPlayerTest = {
         name: 'test' + Math.floor(Math.random() * 1000),
@@ -231,6 +262,39 @@ describe('csPlayer API', () => {
     };
 
     /**
+     * Test for logging in an admin
+     * It sends a mutation to the /graphql endpoint
+     * User has to be an admin to create and delete a cs player
+     */
+    it('should login an admin', async () => {
+        const response = await request(client)
+            .post('/graphql')
+            .send({
+                query: `
+                    mutation Login($loginInput: LoginInput!) {
+                        login(loginInput: $loginInput) {
+                            token
+                            user {
+                                id
+                                user_name
+                            }
+                        }
+                    }
+                `,
+                variables: {
+                    loginInput: testAdmin,
+                },
+            });
+        const userData = response.body.data.login;
+        expect(response.body.data.login.user.user_name).toBe(testAdmin.user_name);
+        expect(userData).toHaveProperty("token");
+        expect(userData).toHaveProperty("user");
+        expect(userData.user).toHaveProperty("id");
+        admin = response.body.data.login;
+        admin.token = response.body.data.login.token;
+    });
+
+    /**
      * Test for creating a cs player
      * It sends a mutation to the /graphql endpoint
      */
@@ -239,6 +303,7 @@ describe('csPlayer API', () => {
             console.log(testPlayer);
             const response = await request(client)
                 .post('/graphql')
+                .set('Authorization', `Bearer ${admin.token}`)
                 .send({
                     query: `
                         mutation CreateCsPlayer($input: CsPlayerInput!) {
@@ -410,6 +475,7 @@ describe('csPlayer API', () => {
     it ('should delete a cs player', async () => {
         const response = await request(client)
             .post('/graphql')
+            .set('Authorization', `Bearer ${admin.token}`)
             .send({
                 query: `
                     mutation DeleteCsPlayer($id: ID!) {

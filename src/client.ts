@@ -17,8 +17,14 @@ import { notFound, errorHandler } from './middlewares';
 import path from 'path';
 require('dotenv').config();
 
+/**
+ * Initialize the express app
+ */
 const client = express();
 
+/**
+ * Use helmet to secure the app
+ */
 client.use(
     helmet({
         crossOriginEmbedderPolicy: false,
@@ -26,10 +32,17 @@ client.use(
     })
 );
 
+/**
+ * Serves static files from the build directory
+ */
 client.use(express.static('./build'));
 
-
-
+/**
+ * Initialize the server
+ * Applies middleware to the express app and starts the server
+ * @returns The server
+ * @throws Error if the server fails to start
+ */
 (async () => {
     try {
         const schema = applyMiddleware(

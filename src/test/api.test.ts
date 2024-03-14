@@ -4,6 +4,9 @@ import { LoginResponse } from '../types/MessageTypes';
 import { UserTest, csPlayerTest } from '../types/DBTypes';
 import mongoose from 'mongoose';
 
+/**
+ * Tests for the user API
+ */
 describe('User API', () => {
     let token: string;
 
@@ -14,6 +17,10 @@ describe('User API', () => {
         password: 'test' + Math.floor(Math.random() * 1000),
     };
 
+    /**
+     * Test for registering a user
+     * It sends a mutation to the /graphql endpoint
+     */
     it('should register a user', async () => {
         const response = await request(client)
             .post('/graphql')
@@ -38,6 +45,10 @@ describe('User API', () => {
         expect(userData.user).toHaveProperty("id");
     });
 
+    /**
+     * Test for logging in a user
+     * It sends a mutation to the /graphql endpoint
+     */
     it('should login a user', async () => {
         const response = await request(client)
             .post('/graphql')
@@ -67,6 +78,10 @@ describe('User API', () => {
         token = response.body.data.login.token;
     });
 
+    /**
+     * Test for getting all users
+     * It sends a query to the /graphql endpoint
+     */
     it('should get all users', async () => {
         const response = await request(client)
             .post('/graphql')
@@ -87,6 +102,10 @@ describe('User API', () => {
         expect(users[0]).toHaveProperty('user_name');
     });
 
+    /**
+     * Test for getting a user by id
+     * It sends a query to the /graphql endpoint
+     */
     it('should get a user by id', async () => {
         const response = await request(client)
             .post('/graphql')
@@ -109,6 +128,10 @@ describe('User API', () => {
         expect(userData).toHaveProperty("user_name");
     });
 
+    /**
+     * Test for verifying user's password
+     * It sends a query to the /graphql endpoint
+     */
     it('should verify a password', async () => {
         const response = await request(client)
             .post('/graphql')
@@ -127,6 +150,10 @@ describe('User API', () => {
         expect(response.body.data.verifyPassword).toBe(true);
     });
 
+    /**
+     * Test for updating a user
+     * It sends a mutation to the /graphql endpoint
+     */
     it('should update a user', async () => {
         const response = await request(client)
             .post('/graphql')
@@ -153,6 +180,10 @@ describe('User API', () => {
         expect(response.body.data.updateUser.user.user_name).toBe('updatedUser');
     });
 
+    /**
+     * Test for deleting a user
+     * It sends a mutation to the /graphql endpoint
+     */
     it('should delete a user', async () => {
         const response = await request(client)
             .post('/graphql')
@@ -176,6 +207,9 @@ describe('User API', () => {
     });
 });
 
+/**
+ * Tests for the csPlayer API
+ */
 describe('csPlayer API', () => {
     beforeAll(async () => {
         await mongoose.connect(process.env.DB_URL as string);
@@ -196,6 +230,10 @@ describe('csPlayer API', () => {
         total_winnings: Math.floor(Math.random() * 1000000),
     };
 
+    /**
+     * Test for creating a cs player
+     * It sends a mutation to the /graphql endpoint
+     */
     it('should create a cs player', async () => {
         try {
             console.log(testPlayer);
@@ -238,6 +276,10 @@ describe('csPlayer API', () => {
         }
     });
 
+    /**
+     * Test for getting all cs players
+     * It sends a query to the /graphql endpoint
+     */
     it ('should get all cs players', async () => {
         const response = await request(client)
             .post('/graphql')
@@ -257,6 +299,10 @@ describe('csPlayer API', () => {
         expect(players[0]).toHaveProperty('name');
     });
 
+    /**
+     * Test for getting a cs player by id
+     * It sends a query to the /graphql endpoint
+     */
     it ('should get a cs player by id', async () => {
         const response = await request(client)
             .post('/graphql')
@@ -289,6 +335,10 @@ describe('csPlayer API', () => {
         expect(playerData).toHaveProperty("total_winnings");
     });
 
+    /**
+     * Test for getting a cs player by name
+     * It sends a query to the /graphql endpoint
+     */
     it ('should get a cs player by name', async () => {
         const response = await request(client)
             .post('/graphql')
@@ -321,6 +371,10 @@ describe('csPlayer API', () => {
         expect(playerData).toHaveProperty("total_winnings");
     });
 
+    /**
+     * Test for getting a random cs player
+     * It sends a query to the /graphql endpoint
+     */
     it ('should get a random cs player', async () => {
         const response = await request(client)
             .post('/graphql')
@@ -349,6 +403,10 @@ describe('csPlayer API', () => {
         expect(playerData).toHaveProperty("total_winnings");
     });
 
+    /**
+     * Test for getting all player names
+     * It sends a query to the /graphql endpoint
+     */
     it ('should delete a cs player', async () => {
         const response = await request(client)
             .post('/graphql')

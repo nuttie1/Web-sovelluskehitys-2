@@ -10,10 +10,18 @@ import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import './styles/Navbar.css';
 
+/**
+ * Apollo Client setup
+ */
 const httpLink = createHttpLink({
   uri: process.env.REACT_APP_GRAPHQL_ENDPOINT
 });
 
+/**
+ * This function sets the authorization header for the Apollo Client
+ * @param headers: The headers for the Apollo Client
+ * @returns The headers for the Apollo Client
+ */
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('token');
   return {
@@ -24,11 +32,24 @@ const authLink = setContext((_, { headers }) => {
   }
 });
 
+/**
+ * This is the Apollo Client
+ * @param link: The link for the Apollo Client
+ * @param cache: The cache for the Apollo Client
+ * @returns The Apollo Client
+ */
 const client = new ApolloClient({
   link: authLink.concat(httpLink),
   cache: new InMemoryCache()
 });
 
+/**
+ * This is the wrapper for the profile component
+ * Checks if the user is authenticated and redirects to the login page if not
+ * @param isAuthenticated: Whether the user is authenticated
+ * @param navigate: The navigate function for the router
+ * @returns The profile component if the user is authenticated
+ */
 const ProfileWrapper = () => {
   const isAuthenticated = !!localStorage.getItem('token');
   const navigate = useNavigate();
@@ -42,6 +63,12 @@ const ProfileWrapper = () => {
   return isAuthenticated ? <Profile /> : null;
 };
 
+/**
+ * This is the App component, compiles all the components together
+ * @param isLoggedIn: Whether the user is logged in
+ * @param setIsLoggedIn: The function to set whether the user is logged in
+ * @returns The App component
+ */
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 

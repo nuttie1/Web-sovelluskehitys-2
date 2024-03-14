@@ -4,8 +4,15 @@ import App from './App';
 
 import ReactDOM from 'react-dom';
 
+
 const root = document.getElementById('root');
 
+/**
+ * This is the root of the React app
+ * Renders the app to the root element
+ * @param root: The root element
+ * @returns The app
+ */
 if (root !== null) {
   ReactDOM.render(
     <React.StrictMode>

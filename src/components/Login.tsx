@@ -42,7 +42,7 @@ const Login: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
   const [password, setPassword] = useState('');
   const [errorText, setErrorText] = useState('');
 
-  const [login, { data, loading, error }] = useMutation(LOGIN_MUTATION);
+  const [login] = useMutation(LOGIN_MUTATION);
 
   const navigate = useNavigate();
 

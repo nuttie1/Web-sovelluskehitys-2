@@ -102,14 +102,14 @@ const GET_ALL_PLAYER_NAMES = gql`
  * @returns The Game component
  */
 function Game() {
-  const {loading: playerLoading, error: playerError, data: randomPlayer } = useQuery(GET_RANDOM_PLAYER);
+  const {loading: playerLoading, data: randomPlayer } = useQuery(GET_RANDOM_PLAYER);
   const [guess, setGuess] = useState('');
   const [isCorrectGuess, setIsCorrectGuess] = useState(false);
   const [guesses, setGuesses] = useState<csPlayer[]>([]);
   const [remainingGuesses, setRemainingGuesses] = useState(8);
   const [showAnswer, setShowAnswer] = useState(false);
   const [addPoints] = useMutation(ADD_POINTS_MUTATION);
-  const {loading, error, data} = useQuery(GET_ID);
+  const {data} = useQuery(GET_ID);
   const [showModal, setShowModal] = useState(false);
   const [isUpdatingPoints, setIsUpdatingPoints] = useState(false);
   const [pointsChange, setPointsChange] = useState(0);
@@ -118,7 +118,7 @@ function Game() {
 
   // User data
   const id = data?.checkToken?.user?.id;
-  const { data: userData, loading: userLoading, error: userError, refetch } = useQuery(GET_USER, {
+  const { data: userData, refetch } = useQuery(GET_USER, {
     variables: { id },
     skip: !id || id === null,
   });
@@ -135,7 +135,7 @@ function Game() {
   });
 
   // Player names
-  const {data: playerNamesData, loading: playerNamesLoading, error: playerNamesError } = useQuery(GET_ALL_PLAYER_NAMES);
+  const {data: playerNamesData } = useQuery(GET_ALL_PLAYER_NAMES);
   const options = playerNamesData?.getAllPlayerNames.map((name: string) => ({ value: name, label: name }));
 
   if (playerLoading) {

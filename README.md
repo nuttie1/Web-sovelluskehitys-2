@@ -13,6 +13,8 @@ The project includes the following features:
 ## Getting Started
 Our project for now is hosted in https://noo-web-app.azurewebsites.net/. If we have run out of money in our azure you can setup this project locally.
 ## Local Setup
+Before starting here setup the authentication server in a different project. Authentication repository: https://github.com/nuttie1/noo-web-auth.
+
 Follow these steps to set up the project locally:
 1. **Clone the repository**: Use your preferred Git client to clone this repository to your local machine.
 2. **Configure Environment Variables**: Rename the `.env.sample` file to `.env` and add the value for `DB_URL`.

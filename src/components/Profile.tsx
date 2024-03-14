@@ -1,5 +1,5 @@
 import React, { useState, useEffect, SetStateAction, Dispatch } from 'react';
-import { gql, useQuery, useMutation, ApolloError } from '@apollo/client';
+import { gql, useQuery, useMutation, ApolloError, useApolloClient } from '@apollo/client';
 import { checkUsername, checkPassword } from '../functions/checkData';
 import { useNavigate } from 'react-router-dom';
 
@@ -77,6 +77,8 @@ interface IsUserLoggedIn {
  * @returns The Profile component
  */
 const Profile: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
+  const client = useApolloClient();
+  
   const { data } = useQuery(GET_ID);
   const id = data?.checkToken?.user?.id;
   const { data: userData, loading: userLoading, error: userError, refetch } = useQuery(GET_USER, {
@@ -166,6 +168,7 @@ const Profile: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
   const HandleLogout = () => {
     localStorage.removeItem('token');
     setIsLoggedIn(false);
+    client.resetStore();
     navigate('/login');
   };
 

@@ -61,6 +61,10 @@ const VERIFY_PASSWORD = gql`
   }
 `;
 
+/**
+ * GraphQL mutation to delete a user
+ * @returns The deleted user's ID
+ */
 const DELETE_USER = gql`
   mutation DeleteUser {
     deleteUser {
@@ -97,12 +101,6 @@ const Profile: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
   });
   const [deleteUser] = useMutation(DELETE_USER);
 
-  useEffect(() => {
-    if (id) {
-      refetch();
-    }
-  }, [id, refetch]);
-
   const navigate = useNavigate();
 
   const [updateUser] = useMutation(UPDATE_USER);
@@ -132,7 +130,7 @@ const Profile: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
         return;
       }
       await updateUser({variables: { user: {user_name: newUsername} } });
-      refetch();
+      refetch(); // Refetch the user data to keep the UI updated
       setErrorTextUsername("");
       setNewUsername("");
       setShowModalUpdate(false);
@@ -157,7 +155,7 @@ const Profile: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
         return;
       }
       await updateUser({variables: { user: {password: newPassword} } });
-      refetch();
+      refetch(); // Refetch the user data to keep the UI updated
       setErrorTextOldPassword("");
       setErrorTextNewPassword("");
       setOldPassword("");
@@ -177,6 +175,7 @@ const Profile: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
       }
     }
   }
+
   const HandleResetPoints = async () => {
     try {
       await updateUser({variables: { user: {points: 0} } });
@@ -189,7 +188,7 @@ const Profile: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
   const HandleLogout = () => {
     localStorage.removeItem('token');
     setIsLoggedIn(false);
-    client.clearStore();
+    client.clearStore(); // Clear the Apollo cache to prevent old data from being used
     navigate('/login');
   };
 

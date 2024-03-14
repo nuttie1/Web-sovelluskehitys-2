@@ -35,3 +35,8 @@ Follow these steps to set up the project locally:
     ```
 You're all set! Open the project in your browser at `localhost:4002`.
 ## Testing
+After local environment has been set you can run the tests by command:
+```bash
+npm run test-graphql
+```
+To test the api manually you can access the Apollo Sandbox with `localhost:4002/graphql` or straight in the azure with `/graphql`.

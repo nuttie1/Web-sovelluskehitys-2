@@ -39,4 +39,11 @@ After local environment has been set you can run the tests by command:
 ```bash
 npm run test-graphql
 ```
-To test the api manually you can access the Apollo Sandbox with `localhost:4002/graphql` or straight in the azure with `/graphql`.
+To test the api manually you can access the Apollo Sandbox with `localhost:4002/graphql` or straight in the azure with `/graphql`. 
+
+In the main game page there is a question mark icon that opens a help page.
+
+## Conclusion
+Project is a fun time killer with ability to compare scores with friends. Try to sharpen your cs2 pro scene knowledge. Game works without registering (you do not get point).
+
+Made by Niko Ala-aho, Onni Pajula and Otto Palssa

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {csPlayer} from '../types/DBTypes';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faArrowUp, faArrowDown, faCircleInfo} from '@fortawesome/free-solid-svg-icons';
@@ -115,6 +115,17 @@ function Game({ isLoggedIn }: { isLoggedIn: boolean}) {
   const [pointsChange, setPointsChange] = useState(0);
   const [guessAmount, setGuessAmount] = useState(0);
   const [showInfoModal, setShowInfoModal] = useState(false);
+
+  useEffect(() => {
+    const isReloaded = localStorage.getItem('isReloaded');
+
+    if (!isReloaded) {
+      localStorage.setItem('isReloaded', 'true');
+      window.location.reload(); // Force page reload on component mount
+    } else {
+      localStorage.removeItem('isReloaded'); // Clear the flag after reload
+    }
+  }, []);
 
   // User data
   const id = data?.checkToken?.user?.id;
@@ -323,22 +334,23 @@ function Game({ isLoggedIn }: { isLoggedIn: boolean}) {
       )}
       {showModal && (
         <div className="modal-background">
-        <div className="modal">
-          <button onClick={() => setShowModal(false)} className="close-button">Close</button>
-          {isCorrectGuess ? (
-            <div>
-              <h2 className="modal-title">You WON!</h2>
-              <p className="modal-text">Congratulations, you guessed correctly! The player was: {player.name}</p>
-              {isLoggedIn && <p className="modal-text">You got {pointsChange} points!</p>}
-            </div>
-          ) : (
-            <div>
-              <h2 className="modal-title">You Lost</h2>
-              <p className="modal-text">Sorry, no more guesses left. The correct player was: {player.name}</p>
-              {isLoggedIn && <p className="modal-text">You lost {Math.abs(pointsChange)} points</p>}
-            </div>
-          )}
-        </div>
+          <div className="modal">
+            <button onClick={() => setShowModal(false)} className="close-button">Close</button>
+            {isCorrectGuess ? (
+              <div>
+                <h2 className="modal-title">You WON!</h2>
+                <p className="modal-text">Congratulations, you guessed correctly! The player was: {player.name}</p>
+                {isLoggedIn && <p className="modal-text">You got {pointsChange} points!</p>}
+              </div>
+            ) : (
+              <div>
+                <h2 className="modal-title">You Lost</h2>
+                <p className="modal-text">Sorry, no more guesses left. The correct player was: {player.name}</p>
+                {isLoggedIn && <p className="modal-text">You lost {Math.abs(pointsChange)} points</p>}
+              </div>
+            )}
+            <button onClick={() => window.location.reload()} className="play-again-button">Play again?</button>
+          </div>
         </div>
       )}
       {showInfoModal && (

@@ -13,7 +13,7 @@ import { csPlayer } from "../../types/DBTypes";
  * @returns The resolver for the CS2 player
  */
 
-export default {
+const csPlayerResolver = {
     Query: {
         allCsPlayers: async () => {
             return await csPlayerModel.find();
@@ -44,3 +44,5 @@ export default {
         },
     },
 };
+
+export default csPlayerResolver;

@@ -16,7 +16,7 @@ import { isLoggedIn } from "../../functions/authorize";
  * @returns The resolver for the user
  */
 
-export default {
+const userResolver = {
     Query: {
         users: async () => {
             return await fetchData<UserOutput[]>(
@@ -92,3 +92,5 @@ export default {
         },
     }
 };
+
+export default userResolver;

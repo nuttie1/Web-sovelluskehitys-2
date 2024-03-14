@@ -32,7 +32,7 @@ const csPlayerResolver = {
         },
         getAllPlayerNames: async () => {
             const players = await csPlayerModel.find({}, 'name');
-            return players.map(player => player.name);
+            return players.map(player => player.name).sort();
         },
     },
     Mutation: {

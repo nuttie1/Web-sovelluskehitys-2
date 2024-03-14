@@ -112,7 +112,6 @@ table tbody tr:hover {
 }
   
 .modal {
-    bottom: 200px;
     position: relative;
     background-color: white;
     padding: 20px;
@@ -122,7 +121,6 @@ table tbody tr:hover {
 
 .info-modal {
     text-align: left;
-    bottom: 200px;
     position: relative;
     background-color: white;
     padding: 20px;

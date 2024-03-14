@@ -101,7 +101,7 @@ const GET_ALL_PLAYER_NAMES = gql`
  * @function Game
  * @returns The Game component
  */
-function Game() {
+function Game({ isLoggedIn }: { isLoggedIn: boolean}) {
   const {loading: playerLoading, data: randomPlayer } = useQuery(GET_RANDOM_PLAYER);
   const [guess, setGuess] = useState('');
   const [isCorrectGuess, setIsCorrectGuess] = useState(false);
@@ -174,36 +174,40 @@ function Game() {
     // If the guessed player is correct
     if (guessedPlayer.name === player.name) {
       setIsCorrectGuess(true);
+      if (isLoggedIn) { // Check if the user is logged in, if so, update their points
       await refetch();
-      setIsUpdatingPoints(true);
-      const newPoints = userData.userById.points + 10 + remainingGuesses;
-      setPointsChange(10 + remainingGuesses - guessAmount);
-      await addPoints({
-        variables: {
-          user: {
-            points: newPoints
+        setIsUpdatingPoints(true);
+        const newPoints = userData.userById.points + 10 + remainingGuesses;
+        setPointsChange(10 + remainingGuesses - guessAmount);
+        await addPoints({
+          variables: {
+            user: {
+              points: newPoints
+            }
           }
-        }
-      });
-      await refetch()
-      setIsUpdatingPoints(false);
+        });
+        await refetch()
+        setIsUpdatingPoints(false);
+      }
       setShowAnswer(true);
       setShowModal(true);
     // If the guessed player is incorrect
-    } else {
-      setIsUpdatingPoints(true);
-      setGuessAmount(prev => prev + 1);
-      const newPoints = userData.userById.points - 1;
-      setPointsChange(prev => prev - 1);
-      await addPoints({
-        variables: {
-          user: {
-            points: newPoints
+    } else { 
+      if (isLoggedIn) { // Check if the user is logged in, if so, update their points
+        setIsUpdatingPoints(true);
+        setGuessAmount(prev => prev + 1);
+        const newPoints = userData.userById.points - 1;
+        setPointsChange(prev => prev - 1);
+        await addPoints({
+          variables: {
+            user: {
+              points: newPoints
+            }
           }
-        }
-      });
-      await refetch();
-      setIsUpdatingPoints(false);
+        });
+        await refetch();
+        setIsUpdatingPoints(false);
+      }
 
       // Check if the user has any remaining guesses
       if (remainingGuesses === 1) {
@@ -324,13 +328,13 @@ function Game() {
             <div>
               <h2 className="modal-title">You WON!</h2>
               <p className="modal-text">Congratulations, you guessed correctly! The player was: {player.name}</p>
-              <p className="modal-text">You got {pointsChange} points!</p>
+              {isLoggedIn && <p className="modal-text">You got {pointsChange} points!</p>}
             </div>
           ) : (
             <div>
               <h2 className="modal-title">You Lost</h2>
               <p className="modal-text">Sorry, no more guesses left. The correct player was: {player.name}</p>
-              <p className="modal-text">You lost {Math.abs(pointsChange)} points</p>
+              {isLoggedIn && <p className="modal-text">You lost {Math.abs(pointsChange)} points</p>}
             </div>
           )}
         </div>

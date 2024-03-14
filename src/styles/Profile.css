@@ -16,6 +16,14 @@
     margin-bottom: 20px;
     margin-top: 0;
 }
+
+.profile-title-form-delete {
+    color: #333;
+    margin-bottom: 20px;
+    margin-top: 0;
+    margin-left: 55px;
+    margin-right: 55px;
+}
   
 .profile-email {
     font-size: 18px;

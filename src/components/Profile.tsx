@@ -61,6 +61,16 @@ const VERIFY_PASSWORD = gql`
   }
 `;
 
+const DELETE_USER = gql`
+  mutation DeleteUser {
+    deleteUser {
+      user {
+        id
+      }
+    }
+  }
+`;
+
 /**
  * Interface for the IsUserLoggedIn function
  * @interface IsUserLoggedIn
@@ -85,6 +95,7 @@ const Profile: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
     variables: { id },
     skip: !id || id === null,
   });
+  const [deleteUser] = useMutation(DELETE_USER);
 
   useEffect(() => {
     if (id) {
@@ -97,7 +108,8 @@ const Profile: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
   const [updateUser] = useMutation(UPDATE_USER);
   const [verifyPassword] = useMutation(VERIFY_PASSWORD);
 
-  const [showModal, setShowModal] = useState(false);
+  const [showModalUpdate, setShowModalUpdate] = useState(false);
+  const [showModalDelete, setShowModalDelete] = useState(false);
   const [newUsername, setNewUsername] = useState('');
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -122,7 +134,7 @@ const Profile: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
       refetch();
       setErrorTextUsername("");
       setNewUsername("");
-      setShowModal(false);
+      setShowModalUpdate(false);
     } catch (error) {
       console.error('Error updating user:', error);
       setErrorTextUsername("error");
@@ -149,7 +161,7 @@ const Profile: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
       setErrorTextNewPassword("");
       setOldPassword("");
       setNewPassword("");
-      setShowModal(false);
+      setShowModalUpdate(false);
     } catch (error) {
       console.error('Error updating user:', error);
       if ((error as ApolloError).graphQLErrors) {
@@ -168,20 +180,30 @@ const Profile: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
   const HandleLogout = () => {
     localStorage.removeItem('token');
     setIsLoggedIn(false);
-    client.resetStore();
+    client.clearStore();
     navigate('/login');
   };
+
+  const HandleUserDelete = async () => {
+    try {
+      await deleteUser();
+      HandleLogout();
+    } catch (error) {
+      console.error('Error deleting user:', error);
+    }
+  }
 
   return (
     <div className="profile-container">
       <h1 className="profile-title">{userData.userById.user_name}</h1>
       <p className="profile-points">Your points: {userData.userById.points}</p>
-      <button onClick={() => setShowModal(true)} className="update-button">Edit</button>
+      <button onClick={() => setShowModalUpdate(true)} className="update-button">Edit</button>
       <button onClick={HandleLogout} className="update-button">Logout</button>
-      {showModal && (
+      <button onClick={() => setShowModalDelete(true)} className="update-button">Delete</button>
+      {showModalUpdate && (
         <div className="modal-background">
         <div className="modal">
-        <button onClick={() => setShowModal(false)} className="close-button">Close</button>
+        <button onClick={() => setShowModalUpdate(false)} className="close-button">Close</button>
           <h2 className="profile-title-form">Update your data</h2>
           <p className="error-text">{errorTextUsername}</p>
           <form className="updateUser-form" onSubmit={handleUsernameUpdate}>
@@ -216,6 +238,15 @@ const Profile: React.FC<IsUserLoggedIn> = ({setIsLoggedIn}) => {
             </label>
             <button type="submit"className="update-button" >Update</button>
           </form>
+        </div>
+        </div>
+      )}
+      {showModalDelete && (
+        <div className="modal-background">
+        <div className="modal">
+        <button onClick={() => setShowModalDelete(false)} className="close-button">Close</button>
+          <h2 className="profile-title-form-delete">Are you sure?</h2>
+          <button onClick={HandleUserDelete} className="update-button">Yes</button>
         </div>
         </div>
       )}

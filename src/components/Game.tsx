@@ -240,7 +240,7 @@ function Game({ isLoggedIn }: { isLoggedIn: boolean}) {
       <div className="game-header">
         <h1 className="game-title">CS-GG</h1>
         <button onClick={() => setShowInfoModal(true)} className="info-button">
-          <FontAwesomeIcon icon={faCircleInfo} />
+          <FontAwesomeIcon icon={faCircleInfo} className="faCircleInfo" />
         </button>
       </div>
       <p className="game-description">Counter-Strike Pro Player Guessing Game</p>

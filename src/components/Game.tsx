@@ -251,6 +251,7 @@ function Game({ isLoggedIn }: { isLoggedIn: boolean}) {
             onChange={(option: { value: string; label: string } | null) => setGuess(option?.value || '')}
             options={options}
             isDisabled={isUpdatingPoints}
+            openMenuOnClick={false}
             isSearchable
             placeholder="Enter your guess"
             styles={{

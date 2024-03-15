@@ -171,6 +171,11 @@ function Game({ isLoggedIn }: { isLoggedIn: boolean}) {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    // Prevent empty guesses
+    if (!guess) {
+      return;
+    }
+
     refetchGuessedPlayer()
     const guessedPlayer: csPlayer = {
       id: guessedPlayerData?.getCsPlayerByName.id,

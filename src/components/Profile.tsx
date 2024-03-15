@@ -1,4 +1,4 @@
-import React, { useState, useEffect, SetStateAction, Dispatch } from 'react';
+import React, { useState, SetStateAction, Dispatch } from 'react';
 import { gql, useQuery, useMutation, ApolloError, useApolloClient } from '@apollo/client';
 import { checkUsername, checkPassword } from '../functions/checkData';
 import { useNavigate } from 'react-router-dom';

@@ -11,7 +11,7 @@ The project includes the following features:
 - **Login System**: Enables users to log in.
 
 ## Getting Started
-Our project for now is hosted in https://noo-web-app.azurewebsites.net/. If we have run out of money in our azure you can setup this project locally.
+Our project for now is hosted in [csgg.fi](https://csgg.fi/). If we have run out of money in our azure you can setup this project locally.
 ## Local Setup
 Before starting here setup the authentication server in a different project. Authentication repository: https://github.com/nuttie1/noo-web-auth.
 

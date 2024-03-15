@@ -37,3 +37,9 @@
 .leaderboard-score {
     color: #007bff;
 }
+
+.leaderboard-divider {
+    width: 100%;
+    border-top: 2px solid #000;
+    margin: 0px 0;
+}

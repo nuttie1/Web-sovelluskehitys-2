@@ -57,7 +57,7 @@ const Leaderboard: React.FC = () => {
   if (!data || !data.users) return <p>No leaderboard data available.</p>;
 
   const sortedScores = [...data.users]
-    .filter((userScore) => userScore.points > 0) // Remove users with 0 points
+    .filter((userScore) => userScore.points !== 0) // Remove users with 0 points
     .sort((a, b) => b.points - a.points);
 
   return (
@@ -65,10 +65,15 @@ const Leaderboard: React.FC = () => {
       <h1 className="leaderboard-title">Leaderboard</h1>
       <ul className="leaderboard-list">
         {sortedScores.map((userScore, index) => (
-          <li key={index} className="leaderboard-item">
-            <span className="leaderboard-name">{userScore.user_name}:</span>
-            <span className="leaderboard-score">{userScore.points}</span>
-          </li>
+          <>
+            {index > 0 && sortedScores[index - 1].points >= 0 && userScore.points < 0 && (
+              <hr className="leaderboard-divider" />
+          )}
+            <li key={index} className="leaderboard-item">
+              <span className="leaderboard-name">{userScore.user_name}:</span>
+              <span className="leaderboard-score">{userScore.points}</span>
+            </li>
+          </>
         ))}
       </ul>
     </div>

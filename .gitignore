@@ -1,5 +1,6 @@
 # our own stuff
 build
+.DS_Store
 
 # Logs
 logs
